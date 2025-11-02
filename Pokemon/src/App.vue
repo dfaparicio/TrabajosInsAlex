@@ -324,8 +324,6 @@ async function buscarPokemon() {
   }
 }
 
-buscarPokemon();
-
 colores.value = {
   normal: '#B8B89A',
   fire: '#FF6B35',
@@ -346,6 +344,10 @@ colores.value = {
   steel: '#B0B8C0',
   fairy: '#F19CBB'
 };
+
+buscarPokemon();
+
+
 
 </script>
 
