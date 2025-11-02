@@ -465,8 +465,8 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: clamp(140px, 25vw, 300px);
-  height: clamp(140px, 25vw, 300px);
+  width: clamp(210px, 25vw, 350px);
+  height: clamp(210px, 25vw, 350px);
   animation: float 4s ease-in-out infinite;
   transition: filter 0.3s ease;
 }
