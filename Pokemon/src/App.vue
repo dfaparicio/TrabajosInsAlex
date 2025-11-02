@@ -1,16 +1,12 @@
 <template>
-
   <!-------------  CONTENEDOR PRINCIPAL ------------->
   <div class="contendorprincipal">
-
     <!-------------  ENCABEZADO ------------->
     <header class="encabezado">
-
       <!-------------  LOGO ------------->
       <div class="imagen">
         <img :src="Logo" alt="Logo" />
       </div>
-
       <!------------- BUSCADOR ------------->
       <div class="opciones">
         <div class="buscar">
@@ -20,69 +16,54 @@
           </div>
         </div>
       </div>
-
     </header>
-
     <!-------------  CONTENIDO PRINCIPAL ------------->
     <main class="contenedor1">
-
       <!-------------  INFORMACIÓN GENERAL ------------->
       <div class="info1">
-
         <!-------------  SECCIÓN POKÉMON ------------->
         <div class="pokemon">
           <h1>
             {{ nombre ? nombre.charAt(0).toUpperCase() + nombre.slice(1).toLowerCase() : '' }}
           </h1>
-
           <!-------------  IMAGEN PRINCIPAL ------------->
           <div class="pokemonimg">
             <img v-if="tipos.length > 0" :src="imagenP" alt="" class="pokemonimg" :style="{
               '--type-color1': colores[tipos[0]?.type?.name] || '#fff',
-              '--type-color2': tipos[1] ? colores[tipos[1]?.type?.name] : null
+              '--type-color2': tipos[1] ? colores[tipos[1]?.type?.name] : colores[tipos[0]?.type?.name]
             }" />
           </div>
-
           <!------------- MINI IMÁGENES EXTRA ------------->
           <div class="pokemini">
             <div v-for="(img, index) in extraimagenes" :key="index">
               <div class="pokeminiimg">
-                <img :src="img" alt="Imagen Pokémon" class="dropmini" :style="{
+                <img :src="img" alt="Imagen Pokémon" class="dropmini" v-if="tipos.length > 0" :style="{
                   '--type-color1': colores[tipos[0]?.type?.name] || '#fff',
-                  '--type-color2': tipos[1] ? colores[tipos[1]?.type?.name] : null
+                  '--type-color2': tipos[1] ? colores[tipos[1]?.type?.name] : colores[tipos[0]?.type?.name]
                 }" />
               </div>
             </div>
           </div>
-
         </div>
-
         <!------------- INFORMACIÓN GENERAL ------------->
         <div class="informacion">
           <h1>Información</h1>
-
           <!------------- ID Y TIPO ------------->
           <div class="idtipo">
-
             <h1>#{{ id }}</h1>
-
             <div class="tipos">
               <div>
                 <h2>Tipo</h2>
               </div>
-
               <div class="infotipos">
                 <div v-for="(tipo, index) in tipos" :key="index" :class="['type', `type-${tipo.type.name}`]">
                   <p>{{ tipo.type.name.toUpperCase() }}</p>
                 </div>
               </div>
             </div>
-
           </div>
-
           <!------------- ALTURA Y PESO ------------->
           <div class="altupeso">
-
             <div class="altura">
               <div>
                 <h2>Altura</h2>
@@ -91,7 +72,6 @@
                 <p>{{ altura }} M</p>
               </div>
             </div>
-
             <div class="peso">
               <div>
                 <h2>Peso</h2>
@@ -100,15 +80,12 @@
                 <p>{{ peso }} Kg</p>
               </div>
             </div>
-
           </div>
-
           <!------------- DEBILIDADES ------------->
           <div class="debilidades">
             <div>
               <h2>Debilidades</h2>
             </div>
-
             <div class="infodebil">
               <div class="infodebilidad" v-for="(deb, index) in debilidades" :key="index">
                 <p v-for="(debilidad, index) in deb.debilidades" :key="index" :class="['type', `type-${debilidad}`]">
@@ -117,16 +94,13 @@
               </div>
             </div>
           </div>
-
         </div>
-
         <!------------- MOVIMIENTOS ------------->
         <div class="informacion1">
           <div class="movimientos">
             <div>
               <h1>Movimientos</h1>
             </div>
-
             <div class="infomovimiento">
               <div v-for="(mov, index) in detallesmovimientos.slice(0, 6)" :key="index">
                 <h3>{{ mov.nombre.toUpperCase() }}</h3>
@@ -137,12 +111,9 @@
             </div>
           </div>
         </div>
-
       </div>
-
       <!-------------  SECCIÓN ESTADÍSTICAS ------------->
       <div class="informacion2">
-
         <div class="estadisticas">
           <h1>Estadísticas</h1>
           <div class="stat" v-for="(stat, index) in stats" :class="stat.name" :key="index">
@@ -155,54 +126,44 @@
             </div>
           </div>
         </div>
-
         <!--------------------  EVOLUCIÓN ---------------------->
         <div class="evolucion">
           <div>
             <h1>Evolución</h1>
           </div>
-
           <div class="pokeevo">
             <div v-for="(evo, index) in resultadoevoluciones" :key="index">
               <div class="logoevo">
                 <div class="imgevo">
                   <div>
                     <img :src="evo.image ? evo.image : imagenP" :alt="evo.name ? evo.name : nombre"
-                      @error="e => e.target.src = imagenP" class="dropevo" :style="{
+                      @error="e => e.target.src = imagenP" class="dropevo" v-if="tipos.length > 0" :style="{
                         '--type-color1': colores[tipos[0]?.type?.name] || '#fff',
-                        '--type-color2': tipos[1] ? colores[tipos[1]?.type?.name] : null
+                        '--type-color2': tipos[1] ? colores[tipos[1]?.type?.name] : colores[tipos[0]?.type?.name]
                       }" />
                   </div>
                   <p>{{ evo.name
-                      ? evo.name.charAt(0).toUpperCase() + evo.name.slice(1).toLowerCase()
-                      : nombre
-                        ? nombre.charAt(0).toUpperCase() + nombre.slice(1).toLowerCase()
-                        : 'Desconocida' }}</p>
+                    ? evo.name.charAt(0).toUpperCase() + evo.name.slice(1).toLowerCase()
+                    : nombre
+                      ? nombre.charAt(0).toUpperCase() + nombre.slice(1).toLowerCase()
+                      : 'Desconocida' }}</p>
                 </div>
               </div>
             </div>
           </div>
         </div>
-
       </div>
-
     </main>
-
   </div>
-
 </template>
 
 
-
-
-
 <script setup>
-
 import axios from "axios";
 import { ref } from "vue";
+
 import Logo from "./assets/Logo.png";
 import Lupa from "./assets/Lupa.png";
-
 
 const busqueda = ref('');
 const id = ref('');
@@ -210,7 +171,6 @@ const nombre = ref('');
 const imagenP = ref('');
 const extraimagenes = ref([]);
 const stats = ref([]);
-
 const MAX_STATS = {
   hp: 255,
   attack: 190,
@@ -226,9 +186,26 @@ const movimientos = ref([]);
 const detallesmovimientos = ref([]);
 const resultadoevoluciones = ref([]);
 const debilidades = ref([]);
-const colores = ref([]);
-
-
+const colores = ref({
+  normal: '#B8B89A',
+  fire: '#FF6B35',
+  water: '#339AF0',
+  electric: '#FFD43B',
+  grass: '#66BB6A',
+  ice: '#74C0FC',
+  fighting: '#D32F2F',
+  poison: '#B852B8',
+  ground: '#D2A679',
+  flying: '#9C8CFC',
+  psychic: '#FF77A9',
+  bug: '#A8C53A',
+  rock: '#C0A060',
+  ghost: '#8463C3',
+  dragon: '#7B4CFF',
+  dark: '#5A4B3F',
+  steel: '#B0B8C0',
+  fairy: '#F19CBB'
+});
 
 async function buscarPokemon() {
   try {
@@ -267,7 +244,6 @@ async function buscarPokemon() {
     )
     debilidades.value = detallesdebil;
 
-
     movimientos.value = informacion.data.moves;
 
     const detalles = await Promise.all(
@@ -284,8 +260,6 @@ async function buscarPokemon() {
       })
     );
     detallesmovimientos.value = detalles;
-
-
 
     const infoevolucion = await axios.get(`https://pokeapi.co/api/v2/pokemon-species/${id.value || nombre.value.toLowerCase()}`);
     const url = infoevolucion.data.evolution_chain.url;
@@ -318,40 +292,14 @@ async function buscarPokemon() {
 
     resultadoevoluciones.value = resultadoevo;
 
-
   } catch (error) {
     console.error("Error en la consulta:", error);
   }
 }
-colores.value = {
-  normal: '#B8B89A',
-  fire: '#FF6B35',
-  water: '#339AF0',
-  electric: '#FFD43B',
-  grass: '#66BB6A',
-  ice: '#74C0FC',
-  fighting: '#D32F2F',
-  poison: '#B852B8',
-  ground: '#D2A679',
-  flying: '#9C8CFC',
-  psychic: '#FF77A9',
-  bug: '#A8C53A',
-  rock: '#C0A060',
-  ghost: '#8463C3',
-  dragon: '#7B4CFF',
-  dark: '#5A4B3F',
-  steel: '#B0B8C0',
-  fairy: '#F19CBB'
-};
 
 buscarPokemon();
 
-
-
 </script>
-
-
-
 
 
 <style>
@@ -398,12 +346,8 @@ body {
   inset: 0;
   background: linear-gradient(180deg,
       rgba(0, 0, 0, 0) 0%,
-      /* parte superior - clara */
       rgba(0, 0, 0, 0.3) 50%,
-      /* transición */
-      rgba(0, 0, 30, 0.9) 100%
-      /* parte inferior - más oscura */
-    );
+      rgba(0, 0, 30, 0.9) 100%);
   pointer-events: none;
 
   z-index: 1;
@@ -567,6 +511,11 @@ main {
   width: 100%;
   height: 100%;
   object-fit: contain;
+}
+
+.dropmini {
+  filter:
+    drop-shadow(0 0 25px var(--type-color1)) drop-shadow(0 0 50px var(--type-color1)) drop-shadow(0 0 75px var(--type-color1)) brightness(1.2) contrast(1.1) saturate(1.2);
 }
 
 .dropmini[style*="--type-color2"] {
@@ -842,11 +791,15 @@ main {
   gap: 20px;
 }
 
+.dropevo {
+  filter:
+    drop-shadow(0 0 25px var(--type-color1)) drop-shadow(0 0 50px var(--type-color1)) drop-shadow(0 0 75px var(--type-color1)) brightness(1.2) contrast(1.1) saturate(1.2);
+}
+
 .dropevo[style*="--type-color2"] {
   filter:
     drop-shadow(0 5px 6px rgba(0, 0, 0, 0.8)) drop-shadow(0 -5px 5px color-mix(in srgb, var(--type-color1) 100%, white 10%)) drop-shadow(0 5px 7px color-mix(in srgb, var(--type-color2) 100%, white 15%)) saturate(1.3) brightness(1.2);
 }
-
 
 /* ---------- COLORES PARA TIPOS Y ---------- */
 .type {
@@ -983,9 +936,6 @@ main {
 .pokemonimg.type-fairy {
   --type-color1: #F19CBB;
 }
-
-
-
 
 @media (max-width: 1650px) {
   .contenedor1 {
@@ -1211,7 +1161,7 @@ main {
         rgba(0, 0, 30, 0.9) 100%);
   }
 
-  .informacion2{
+  .informacion2 {
     padding: 40px;
   }
 
@@ -1220,7 +1170,6 @@ main {
     justify-content: center;
     flex-wrap: wrap;
     gap: 50px;
+  }
 }
-}
-
 </style>
