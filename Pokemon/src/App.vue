@@ -323,7 +323,6 @@ async function buscarPokemon() {
     console.error("Error en la consulta:", error);
   }
 }
-
 colores.value = {
   normal: '#B8B89A',
   fire: '#FF6B35',
