@@ -160,10 +160,12 @@
 
 <script setup>
 import axios from "axios";
-import { ref } from "vue";
+import { ref } from "vue"; // onMounted 
+import Swal from 'sweetalert2'
 
 import Logo from "./assets/Logo.png";
 import Lupa from "./assets/Lupa.png";
+import Icono from "./assets/IconAlert.png"
 
 const busqueda = ref('');
 const id = ref('');
@@ -209,6 +211,24 @@ const colores = ref({
 
 async function buscarPokemon() {
   try {
+
+    if (!busqueda.value.trim()) {
+      Swal.fire({
+        imageUrl: Icono,
+        imageWidth: 200,
+        imageHeight: 200,
+        title: 'Campo Vacio',
+        text: 'Por favor escribe el nombre o id del pokemon.',
+        confirmButtonColor: '#CC0000',
+        background: 'rgba(255, 255, 255, 0.07)',
+        color: '#fff',
+        customClass: {
+          popup: 'custom-alert'
+        }
+      })
+      return;
+    }
+
     const informacion = await axios.get(`https://pokeapi.co/api/v2/pokemon/${busqueda.value.toLowerCase()}`);
     console.log(informacion);
 
@@ -294,10 +314,50 @@ async function buscarPokemon() {
 
   } catch (error) {
     console.error("Error en la consulta:", error);
+
+    if (error.response && error.response.status === 404) {
+      Swal.fire({
+        imageUrl: Icono,
+        imageWidth: 200,
+        imageHeight: 200,
+        title: 'Pokémon no encontrado',
+        text: 'El nombre o número que escribiste no existe. Verifícalo e inténtalo de nuevo.',
+        confirmButtonColor: '#CC0000',
+        background: 'rgba(255, 255, 255, 0.07)',
+        color: '#fff',
+        customClass: {
+          popup: 'custom-alert'
+        }
+      })
+    }
+
+    else {
+      Swal.fire({
+        imageUrl: Icono,
+        imageWidth: 200,
+        imageHeight: 200,
+        title: 'Error inesperado',
+        text: 'Ocurrió un problema al obtener los datos del Pokémon.',
+        confirmButtonColor: '#CC0000',
+        background: 'rgba(255, 255, 255, 0.07)',
+        color: '#fff',
+        customClass: {
+          popup: 'custom-alert'
+        }
+      })
+    }
+
   }
 }
 
-buscarPokemon();
+// onMounted(() => {
+//   busqueda.value = 'pikachu'
+//   buscarPokemon()
+// })
+
+
+buscarPokemon()
+
 
 </script>
 
@@ -937,6 +997,15 @@ main {
   --type-color1: #F19CBB;
 }
 
+
+/* ---------- ALERTAS ---------- */
+.custom-alert {
+  backdrop-filter: blur(12px) saturate(1.3);
+  border-radius: 18px !important;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* ---------- RESPONSIVIDAD---------- */
 @media (max-width: 1650px) {
   .contenedor1 {
     gap: 40px;
