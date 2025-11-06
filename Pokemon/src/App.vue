@@ -313,7 +313,6 @@ async function buscarPokemon() {
     resultadoevoluciones.value = resultadoevo;
 
   } catch (error) {
-    console.error("Error en la consulta:", error);
 
     if (error.response && error.response.status === 404) {
       Swal.fire({
