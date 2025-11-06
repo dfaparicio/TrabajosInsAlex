@@ -215,8 +215,8 @@ async function buscarPokemon() {
     if (!busqueda.value.trim()) {
       Swal.fire({
         imageUrl: Icono,
-        imageWidth: 200,
-        imageHeight: 200,
+        imageWidth: 150,
+        imageHeight: 150,
         title: 'Campo Vacio',
         text: 'Por favor escribe el nombre o id del pokemon.',
         confirmButtonColor: '#CC0000',
@@ -317,8 +317,8 @@ async function buscarPokemon() {
     if (error.response && error.response.status === 404) {
       Swal.fire({
         imageUrl: Icono,
-        imageWidth: 200,
-        imageHeight: 200,
+        imageWidth: 150,
+        imageHeight: 150,
         title: 'Pokémon no encontrado',
         text: 'El nombre o número que escribiste no existe. Verifícalo e inténtalo de nuevo.',
         confirmButtonColor: '#CC0000',
@@ -333,8 +333,8 @@ async function buscarPokemon() {
     else {
       Swal.fire({
         imageUrl: Icono,
-        imageWidth: 200,
-        imageHeight: 200,
+        imageWidth: 150,
+        imageHeight: 150,
         title: 'Error inesperado',
         text: 'Ocurrió un problema al obtener los datos del Pokémon.',
         confirmButtonColor: '#CC0000',
