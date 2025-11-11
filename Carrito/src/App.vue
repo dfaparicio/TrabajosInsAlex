@@ -25,7 +25,7 @@
               </div>
 
               <div class="cantidad">
-                <button v-if="!prod.agregado" @click="agregarAlCarrito(prod)">
+                <button class="botonagregar" v-if="!prod.agregado" @click="agregarAlCarrito(prod)">
                   Agregar al Carrito
                 </button>
                 <div v-else class="controles-cantidad">
@@ -638,4 +638,8 @@ button:active {
   outline: none;
   box-shadow: none;
 }
+
+
+
+
 </style>
