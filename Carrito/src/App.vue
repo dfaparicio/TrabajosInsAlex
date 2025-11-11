@@ -26,12 +26,12 @@
 
               <div class="cantidad">
                 <button class="botonagregar" v-if="!prod.agregado" @click="agregarAlCarrito(prod)">
-                  Agregar al Carrito
+                  🛒 Agregar al Carrito
                 </button>
                 <div v-else class="controles-cantidad">
-                  <button @click="disminuirCantidad(prod)">-</button>
+                  <button @click="disminuirCantidad(prod)">➖</button>
                   <span>{{ prod.cantidad }}</span>
-                  <button @click="aumentarCantidad(prod)">+</button>
+                  <button @click="aumentarCantidad(prod)">➕</button>
                 </div>
               </div>
             </div>
@@ -59,7 +59,7 @@
               <h2>TOTAL</h2>
               <span>COP ${{ total }}</span>
             </div>
-            <button class="btn-pagar" @click="pagar">Pagar</button>
+            <button class="pagar" @click="pagar">Pagar</button>
           </div>
         </div>
       </div>
@@ -81,6 +81,7 @@ import Tarjeta from "./assets/5090.png";
 import Teclado from "./assets/TECLADO.png";
 import Zowie from "./assets/ZOWIE.png";
 import Loq from "./assets/LOQ.png";
+
 
 const productos = ref([
   {
@@ -156,6 +157,9 @@ const productos = ref([
     agregado: false,
   }
 ]);
+
+console.log(productos.value)
+
 
 /////////////// FUNCION AGREGAR ///////////////
 function agregarAlCarrito(prod) {
@@ -269,6 +273,34 @@ watch(
   },
   { deep: true }
 )
+
+
+
+/////////////// Carrito ///////////////
+watch(
+  [totalproductos, subtotal, impuesto, total],
+  ([nuevoTotalProductos, nuevoSubtotal, nuevoImpuesto, nuevoTotal]) => {
+    const carritoResumen = {
+      totalproductos: nuevoTotalProductos,
+      subtotal: nuevoSubtotal,
+      impuesto: nuevoImpuesto,
+      total: nuevoTotal
+    };
+    localStorage.setItem('carritoResumen', JSON.stringify(carritoResumen));
+  }
+);
+
+const resumenGuardado = localStorage.getItem('carritoResumen');
+if (resumenGuardado) {
+  const carritoResumen = JSON.parse(resumenGuardado);
+  console.log('Resumen del carrito cargado:', carritoResumen);
+}
+
+
+
+
+
+
 
 /////////////// FUNCION PAGAR ///////////////
 function pagar() {
@@ -444,7 +476,7 @@ main {
   justify-content: space-between;
   align-items: center;
   border-radius: 20px;
-  background: #ffffff;
+  background: #f1f1f1;
   box-shadow:
     0 4px 8px rgba(0, 0, 0, 0.08),
     0 8px 20px rgba(0, 0, 0, 0.06);
@@ -453,6 +485,16 @@ main {
   max-width: 100%;
   height: auto;
   box-sizing: border-box;
+
+}
+
+.articulo:hover {
+  transform: scale(1.1);
+  transition: transform 0.8s ease;
+  background: #ffffff;
+  box-shadow:
+    0 4px 10px rgba(0, 0, 0, 0.1),
+    0 8px 25px rgba(0, 0, 0, 0.2);
 }
 
 .img {
@@ -506,30 +548,40 @@ main {
 }
 
 .cantidad button {
-  border: 1px solid black;
-  background: transparent;
+  background: rgb(202, 202, 202);
 }
 
 .controles-cantidad {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 50px;
 }
 
 .controles-cantidad button {
-  padding: 5px 10px;
+  padding: 10px;
   border: none;
-  background-color: #0026ff;
-  color: white;
-  border-radius: 5px;
+  background: rgb(224, 224, 224);
+  color: rgb(0, 0, 0);
+  border-radius: 50px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 15px;
 }
 
 .controles-cantidad span {
-  font-size: 20px;
-  min-width: 20px;
+  font-size: 25px;
+  min-width: 25px;
   text-align: center;
+}
+
+/* ---------- BOTON AGREGAR ---------- */
+.botonagregar {
+  padding: 10px;
+  border: none;
+  background: rgb(224, 224, 224);
+  color: rgb(0, 0, 0);
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 15px;
 }
 
 /* ---------- CONTENEDOR CARRITO ---------- */
@@ -623,23 +675,30 @@ main {
   color: #222 !important;
 }
 
-/* ---------- BOTON PAGAR ---------- */
-.btn-pagar {
+/* ---------- BOTÓN PAGAR ---------- */
+.pagar {
   padding: 15px 30px;
   font-weight: 600;
-  background: linear-gradient(135deg, #2ecc71, #27ae60);
+  background-color: #89a7fc;
+  color: #ffffff;
   border-radius: 14px;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
+  border: none;
+  outline: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.25s ease;
+}
+
+.pagar:hover {
+  background-color: #0044ff;
+  color: #ffffff;
+  transform: scale(1.05);
 }
 
 button:focus,
 button:active {
-  outline: none;
-  box-shadow: none;
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
 }
-
-
-
-
 </style>
