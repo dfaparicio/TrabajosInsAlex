@@ -1,76 +1,197 @@
 <template>
   <div>
-    <header>
-      <h1>Productos Disponibles</h1>
-    </header>
+    <q-layout view="hHh Lpr lFf" class="bg-grey-1 hide-scrollbar">
+      <!-- HEADER -->
+      <q-header elevated class="bg-primary text-white">
+        <q-toolbar>
+          <q-btn
+            flat
+            round
+            dense
+            icon="menu"
+            @click="drawerLeft = !drawerLeft"
+          />
+          <q-toolbar-title class="text-center"
+            >Carrito de Compras</q-toolbar-title
+          >
+          <div class="carrito-btn-wrapper">
+            <q-btn
+              flat
+              round
+              dense
+              icon="shopping_cart"
+              @click="drawerRight = !drawerRight"
+            />
+            <q-badge
+              v-if="totalproductos > 0"
+              color="red"
+              text-color="white"
+              floating
+            >
+              {{ totalproductos }}
+            </q-badge>
+          </div>
+        </q-toolbar>
+      </q-header>
 
-    <main>
-      <!-------------- ALERTA > 1000 ------------>
-      <div class="alertas" v-if="alerta">
-        <p>{{ alerta }}</p>
-      </div>
+      <!-- DRAWER IZQUIERDO -->
+      <q-drawer
+        v-model="drawerLeft"
+        :width="220"
+        elevated
+        class="bg-primary text-white"
+      >
+        <q-list>
+          <q-item clickable v-ripple>
+            <q-item-section>Inicio</q-item-section>
+          </q-item>
+          <q-item clickable v-ripple>
+            <q-item-section>Productos</q-item-section>
+          </q-item>
+          <q-item clickable v-ripple>
+            <q-item-section>Contacto</q-item-section>
+          </q-item>
+        </q-list>
+      </q-drawer>
 
-      <div class="contenedor">
-
-        <!-------------- TODO DE PRODUCTOS ------------>
-        <div class="productos">
-          <div class="todoslosarticulos">
-            <div class="articulo" v-for="(prod, index) in productos" :key="index">
-              <div class="img"><img :src="prod.imagen" :alt="prod.nombre" /></div>
-
-              <div class="infoarticulo">
-                <h3>{{ prod.nombre }}</h3>
-                <p>{{ prod.descripcion }}</p>
-                <p>COP ${{ prod.precio }}</p>
+      <!-- DRAWER DERECHO -->
+      <q-drawer
+        side="right"
+        v-model="drawerRight"
+        bordered
+        :width="300"
+        :class="$q.dark.isActive ? 'bg-grey-9' : 'bg-grey-3'"
+        class="fijo-drawer"
+      >
+        <q-scroll-area class="fit">
+          <!-------------- TODO CARRITO ------------>
+          <div class="carritofijo q-pa-md">
+            <div class="carrito">
+              <p class="info row justify-between">
+                <strong>Total de Productos:</strong>
+                <span>{{ totalproductos }}</span>
+              </p>
+              <p class="info row justify-between">
+                <strong>Subtotal:</strong>
+                <span> COP ${{ subtotal }}</span>
+              </p>
+              <p class="info row justify-between">
+                <strong>Impuesto (16%):</strong>
+                <span>COP ${{ impuesto }}</span>
+              </p>
+              <br />
+              <div class="total row justify-between">
+                <h5>TOTAL</h5>
+                <span>COP ${{ total }}</span>
               </div>
+              <div class="pagar row justify-center q-my-md">
+                <q-btn
+                  @click="pagar"
+                  round
+                  color="positive"
+                  icon="shopping_cart"
+                />
+              </div>
+            </div>
+          </div>
+        </q-scroll-area>
+      </q-drawer>
 
-              <div class="cantidad">
-                <button class="botonagregar" v-if="!prod.agregado" @click="agregarAlCarrito(prod)">
-                  🛒 Agregar al Carrito
-                </button>
-                <div v-else class="controles-cantidad">
-                  <button @click="disminuirCantidad(prod)">➖</button>
-                  <span>{{ prod.cantidad }}</span>
-                  <button @click="aumentarCantidad(prod)">➕</button>
+      <!-- CONTENIDO PRINCIPAL -->
+      <q-page-container>
+        <q-page>
+          <main>
+            <!-------------- ALERTA > 1000 ------------>
+            <q-banner
+              v-if="alerta"
+              class="bg-green-2 text-green-10 q-ma-md q-pa-sm shadow-2"
+              rounded
+              inline-actions
+            >
+              <template v-slot:avatar>
+                <q-icon name="local_shipping" color="green-8" />
+              </template>
+
+              {{ alerta }}
+
+              <template v-slot:action>
+                <q-btn
+                  flat
+                  color="green-9"
+                  label="Ver detalles"
+                  @click="drawerRight = true"
+                />
+              </template>
+            </q-banner>
+
+            <div class="contenedor">
+              <!-------------- TODO DE PRODUCTOS ------------>
+              <div class="productos q-pa-xl">
+                <div class="todoslosarticulos">
+                  <div
+                    class="articulo"
+                    v-for="(prod, index) in productos"
+                    :key="index"
+                  >
+                    <div class="img">
+                      <img :src="prod.imagen" :alt="prod.nombre" />
+                    </div>
+
+                    <div class="infoarticulo text-center q-gutter-md">
+                      <h5>{{ prod.nombre }}</h5>
+                      <p>{{ prod.descripcion }}</p>
+                      <p>COP ${{ prod.precio }}</p>
+                    </div>
+
+                    <div class="cantidad">
+                      <q-btn
+                        class="botonagregar"
+                        v-if="!prod.agregado"
+                        @click="agregarAlCarrito(prod)"
+                        push
+                        color="positive"
+                        glossy
+                        icon="local_grocery_store"
+                        label="Agregar"
+                      />
+                      <div
+                        v-else
+                        class="controles-cantidad row items-center justify-between q-gutter-md"
+                      >
+                        <q-btn
+                          dense
+                          round
+                          color="negative"
+                          glossy
+                          icon="remove"
+                          @click="disminuirCantidad(prod)"
+                        />
+                        <span>{{ prod.cantidad }}</span>
+                        <q-btn
+                          dense
+                          round
+                          color="positive"
+                          glossy
+                          icon="add"
+                          @click="aumentarCantidad(prod)"
+                        />
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-
-        <!-------------- TODO CARRITO ------------>
-        <div class="carritofijo">
-          <div class="carrito">
-            <h2>Carrito de Compras</h2>
-            <p class="info">
-              <strong>Total de Productos:</strong>
-              <span>{{ totalproductos }}</span>
-            </p>
-            <p class="info">
-              <strong>Subtotal:</strong>
-              <span> COP ${{ subtotal }}</span>
-            </p>
-            <p class="info">
-              <strong>Impuesto (16%):</strong>
-              <span>COP ${{ impuesto }}</span>
-            </p>
-            <br />
-            <div class="total">
-              <h2>TOTAL</h2>
-              <span>COP ${{ total }}</span>
-            </div>
-            <button class="pagar" @click="pagar">Pagar</button>
-          </div>
-        </div>
-      </div>
-    </main>
+          </main>
+        </q-page>
+      </q-page-container>
+    </q-layout>
   </div>
 </template>
 
 <script setup>
 import { ref, computed, watch } from "vue";
-import Swal from 'sweetalert2';
-import 'sweetalert2/dist/sweetalert2.min.css';
+import Swal from "sweetalert2";
+import "sweetalert2/dist/sweetalert2.min.css";
 
 import Tv from "./assets/TV.png";
 import Msi from "./assets/MSI.png";
@@ -82,11 +203,14 @@ import Teclado from "./assets/TECLADO.png";
 import Zowie from "./assets/ZOWIE.png";
 import Loq from "./assets/LOQ.png";
 
+const drawerLeft = ref(false);
+const drawerRight = ref(false);
 
 const productos = ref([
   {
     nombre: "AMD Ryzen 7 7700X",
-    descripcion: "Procesador de 8 núcleos y alto rendimiento para gaming y trabajo.",
+    descripcion:
+      "Procesador de 8 núcleos y alto rendimiento para gaming y trabajo.",
     imagen: Ryzen,
     precio: 250,
     cantidad: 1,
@@ -94,7 +218,8 @@ const productos = ref([
   },
   {
     nombre: "Samsung SSD 1TB NVMe",
-    descripcion: "Unidad de estado sólido ultrarrápida con lectura de 7000 MB/s.",
+    descripcion:
+      "Unidad de estado sólido ultrarrápida con lectura de 7000 MB/s.",
     imagen: Samsung,
     precio: 100,
     cantidad: 1,
@@ -110,7 +235,8 @@ const productos = ref([
   },
   {
     nombre: "Logitech G Pro Mecánico",
-    descripcion: "Teclado mecánico compacto y preciso para jugadores exigentes.",
+    descripcion:
+      "Teclado mecánico compacto y preciso para jugadores exigentes.",
     imagen: Teclado,
     precio: 100,
     cantidad: 1,
@@ -155,11 +281,10 @@ const productos = ref([
     precio: 120,
     cantidad: 1,
     agregado: false,
-  }
+  },
 ]);
 
-console.log(productos.value)
-
+console.log(productos.value);
 
 /////////////// FUNCION AGREGAR ///////////////
 function agregarAlCarrito(prod) {
@@ -167,15 +292,15 @@ function agregarAlCarrito(prod) {
   prod.cantidad = 1;
   Swal.fire({
     toast: true,
-    position: 'top-end',
-    icon: 'success',
+    position: "top-end",
+    icon: "success",
     title: `${prod.nombre} fue añadido al carrito`,
     imageUrl: prod.imagen,
     customClass: {
-      popup: 'toast-carrito'
+      popup: "toast-carrito",
     },
     showConfirmButton: false,
-    timer: 1500
+    timer: 1500,
   });
 }
 /////////////// FUNCION AUMENTAR ///////////////
@@ -183,17 +308,16 @@ function aumentarCantidad(prod) {
   prod.cantidad++;
   Swal.fire({
     toast: true,
-    position: 'top-end',
-    icon: 'success',
+    position: "top-end",
+    icon: "success",
     title: `Agregaste una unidad más de ${prod.nombre}`,
     imageUrl: prod.imagen,
     customClass: {
-      popup: 'toast-carrito'
+      popup: "toast-carrito",
     },
     showConfirmButton: false,
-    timer: 1500
+    timer: 1500,
   });
-
 }
 /////////////// FUNCION DISMINUIR ///////////////
 function disminuirCantidad(prod) {
@@ -201,29 +325,29 @@ function disminuirCantidad(prod) {
     prod.cantidad--;
     Swal.fire({
       toast: true,
-      position: 'top-end',
-      icon: 'info',
+      position: "top-end",
+      icon: "info",
       title: `Quitaste una unidad de ${prod.nombre}`,
       imageUrl: prod.imagen,
       customClass: {
-        popup: 'toast-carrito'
+        popup: "toast-carrito",
       },
       showConfirmButton: false,
-      timer: 1500
+      timer: 1500,
     });
   } else {
     prod.agregado = false;
     Swal.fire({
       toast: true,
-      position: 'top-end',
-      icon: 'error',
+      position: "top-end",
+      icon: "error",
       title: `${prod.nombre} fue eliminado del carrito`,
       imageUrl: prod.imagen,
       customClass: {
-        popup: 'toast-carrito'
+        popup: "toast-carrito",
       },
       showConfirmButton: false,
-      timer: 1500
+      timer: 1500,
     });
   }
 }
@@ -238,43 +362,42 @@ const totalproductos = computed(() => {
 const subtotal = computed(() => {
   return productos.value
     .filter((prod) => prod.agregado)
-    .reduce((total, prod) => total + prod.precio * prod.cantidad, 0)
-})
+    .reduce((total, prod) => total + prod.precio * prod.cantidad, 0);
+});
 
 const impuesto = computed(() => {
   return subtotal.value * 0.16;
-})
+});
 
 const total = computed(() => {
   return subtotal.value + impuesto.value;
-})
+});
 
 /////////////// ALERTA ENVIO > 1000 ///////////////
-const alerta = ref('');
+const alerta = ref("");
 
 watch(total, (nuevototal) => {
   if (nuevototal > 1000) {
-    alerta.value = '¡Felicidades! Has desbloqueado el envío gratis por compras superiores a $1000.'
+    alerta.value =
+      "¡Felicidades! Has desbloqueado el envío gratis por compras superiores a $1000.";
   } else {
-    alerta.value = ''
+    alerta.value = "";
   }
-})
+});
 
 /////////////// LOCALSTORAGE ///////////////
-const guardados = localStorage.getItem('productos')
+const guardados = localStorage.getItem("productos");
 if (guardados) {
-  productos.value = JSON.parse(guardados)
+  productos.value = JSON.parse(guardados);
 }
 
 watch(
   productos,
   (nuevo) => {
-    localStorage.setItem('productos', JSON.stringify(nuevo))
+    localStorage.setItem("productos", JSON.stringify(nuevo));
   },
   { deep: true }
-)
-
-
+);
 
 /////////////// Carrito ///////////////
 watch(
@@ -284,72 +407,66 @@ watch(
       totalproductos: nuevoTotalProductos,
       subtotal: nuevoSubtotal,
       impuesto: nuevoImpuesto,
-      total: nuevoTotal
+      total: nuevoTotal,
     };
-    localStorage.setItem('carritoResumen', JSON.stringify(carritoResumen));
+    localStorage.setItem("carritoResumen", JSON.stringify(carritoResumen));
   }
 );
 
-const resumenGuardado = localStorage.getItem('carritoResumen');
+const resumenGuardado = localStorage.getItem("carritoResumen");
 if (resumenGuardado) {
   const carritoResumen = JSON.parse(resumenGuardado);
-  console.log('Resumen del carrito cargado:', carritoResumen);
+  console.log("Resumen del carrito cargado:", carritoResumen);
 }
-
-
-
-
-
-
 
 /////////////// FUNCION PAGAR ///////////////
 function pagar() {
-  const productosEnCarrito = productos.value.filter(p => p.agregado);
+  const productosEnCarrito = productos.value.filter((p) => p.agregado);
 
   if (productosEnCarrito.length === 0) {
     Swal.fire({
       toast: true,
-      position: 'top-end',
-      icon: 'info',
-      title: 'Tu carrito está vacío 🛒',
+      position: "top-end",
+      icon: "info",
+      title: "Tu carrito está vacío 🛒",
       showConfirmButton: false,
       timer: 1800,
-      background: '#fff',
-      customClass: { popup: 'alerta-nueva' }
+      background: "#fff",
+      customClass: { popup: "alerta-nueva" },
     });
     return;
   }
 
   Swal.fire({
     toast: true,
-    title: '¿Deseas completar tu compra?',
+    title: "¿Deseas completar tu compra?",
     html: `Total a pagar: <strong>COP $${total.value}</strong>`,
-    icon: 'question',
+    icon: "question",
     showCancelButton: true,
-    confirmButtonText: 'Sí, pagar ahora',
-    cancelButtonText: 'Cancelar',
-    confirmButtonColor: '#28a745',
-    cancelButtonColor: '#d33',
-    customClass: { popup: 'alerta-pago' },
+    confirmButtonText: "Sí, pagar ahora",
+    cancelButtonText: "Cancelar",
+    confirmButtonColor: "#28a745",
+    cancelButtonColor: "#d33",
+    customClass: { popup: "alerta-pago" },
   }).then((result) => {
     if (result.isConfirmed) {
-      productos.value.forEach(p => {
+      productos.value.forEach((p) => {
         p.agregado = false;
         p.cantidad = 1;
       });
 
-      localStorage.setItem('productos', JSON.stringify(productos.value));
+      localStorage.setItem("productos", JSON.stringify(productos.value));
 
       Swal.fire({
         toast: true,
         toast: true,
-        position: 'top-end',
-        icon: 'success',
-        title: '¡Pago completado!',
-        text: 'Gracias por tu compra',
+        position: "top-end",
+        icon: "success",
+        title: "¡Pago completado!",
+        text: "Gracias por tu compra",
         showConfirmButton: false,
         timer: 1700,
-        customClass: { popup: 'alerta-nueva' }
+        customClass: { popup: "alerta-nueva" },
       });
     }
   });
@@ -364,6 +481,15 @@ function pagar() {
   color: black;
 }
 
+::-webkit-scrollbar {
+  display: none;
+}
+
+body {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 html,
 body {
   width: 100%;
@@ -371,6 +497,7 @@ body {
   overflow-x: hidden;
   margin: 0;
   padding: 0;
+  background: white;
 }
 
 /* ---------- APP---------- */
@@ -383,119 +510,7 @@ body {
   overflow: visible;
 }
 
-/* ---------- ENCABEZADO ---------- */
-header {
-  padding: 40px;
-}
-
-
-/* ---------- CUERPO ---------- */
-main {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 50px;
-}
-
-/* ---------- ALERTA > 1000 ---------- */
-.alertas {
-  width: 40%;
-  padding: 16px 20px;
-  border-radius: 14px;
-  background: linear-gradient(135deg, #fff7d6, #fff3b0);
-  font-weight: 600;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-  animation: aparecer 1.2s ease, resplandor 2s infinite ease-in-out;
-}
-
-.alertas::before {
-  content: "🎁";
-  font-size: 1.6rem;
-  display: inline-block;
-  animation: saltito 2s infinite ease-in-out;
-}
-
-@keyframes aparecer {
-  from {
-    opacity: 0;
-    transform: translateY(-10px) scale(0.97);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-@keyframes saltito {
-
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-
-  50% {
-    transform: translateY(-6px);
-  }
-}
-
 /* ---------- CONTENEDOR PRINCIPAL ---------- */
-.contenedor {
-  display: flex;
-  justify-content: space-around;
-  width: 100%;
-  padding-top: 50px;
-}
-
-/* ---------- CONTENEDOR PRODUCTOS ---------- */
-.productos {
-  width: 60%;
-  padding-bottom: 100px;
-  box-sizing: border-box;
-}
-
-.todoslosarticulos {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 30px;
-  justify-items: center;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-/* ---------- CONTENEDOR ARTICULO ---------- */
-.articulo {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  border-radius: 20px;
-  background: #f1f1f1;
-  box-shadow:
-    0 4px 8px rgba(0, 0, 0, 0.08),
-    0 8px 20px rgba(0, 0, 0, 0.06);
-  padding: 20px;
-  width: 100%;
-  max-width: 100%;
-  height: auto;
-  box-sizing: border-box;
-
-}
-
-.articulo:hover {
-  transform: scale(1.1);
-  transition: transform 0.8s ease;
-  background: #ffffff;
-  box-shadow:
-    0 4px 10px rgba(0, 0, 0, 0.1),
-    0 8px 25px rgba(0, 0, 0, 0.2);
-}
 
 .img {
   display: flex;
@@ -511,117 +526,45 @@ main {
   object-fit: contain;
 }
 
-/* ---------- INFORMACION ARTICULO ---------- */
-.infoarticulo {
+/* ---------- CONTENEDOR PRINCIPAL ---------- */
+.contenedor {
   display: flex;
-  flex-direction: column;
   justify-content: space-around;
-  align-items: center;
-  width: 80%;
+  width: 100%;
 }
 
-.infoarticulo h3 {
-  font-size: 1.2rem;
-  color: #333;
-  margin-bottom: 0.5rem;
+.todoslosarticulos {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+  justify-items: center;
 }
 
-.infoarticulo p {
-  width: 85%;
-  color: #555;
-  line-height: 1.4;
-  margin-bottom: 0.5rem;
-}
-
-.infoarticulo strong,
-.infoarticulo p:last-child {
-  color: #007bff;
-  font-weight: 600;
-}
-
-/* ---------- CANTIDAD - Y + ---------- */
-.cantidad {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-}
-
-.cantidad button {
-  background: rgb(202, 202, 202);
-}
-
-.controles-cantidad {
-  display: flex;
-  align-items: center;
-  gap: 50px;
-}
-
-.controles-cantidad button {
-  padding: 10px;
-  border: none;
-  background: rgb(224, 224, 224);
-  color: rgb(0, 0, 0);
-  border-radius: 50px;
-  cursor: pointer;
-  font-size: 15px;
-}
-
-.controles-cantidad span {
-  font-size: 25px;
-  min-width: 25px;
-  text-align: center;
-}
-
-/* ---------- BOTON AGREGAR ---------- */
-.botonagregar {
-  padding: 10px;
-  border: none;
-  background: rgb(224, 224, 224);
-  color: rgb(0, 0, 0);
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 15px;
-}
-
-/* ---------- CONTENEDOR CARRITO ---------- */
-.carritofijo {
+/* ---------- CONTENEDOR ARTICULO ---------- */
+.articulo {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  width: 25%;
-  height: 300px;
+  justify-content: space-between;
+  align-items: center;
   border-radius: 20px;
-  background: #ffffff;
-  box-shadow:
-    0 4px 8px rgba(0, 0, 0, 0.08),
-    0 8px 20px rgba(0, 0, 0, 0.06);
-  position: sticky;
-  top: 20px;
-  padding: 20px 0 20px 0;
+  background: #f1f1f1;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08), 0 8px 20px rgba(0, 0, 0, 0.06);
+  padding: 20px;
 }
 
-.info {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
+.carrito-btn-wrapper {
+  position: relative;
+  display: inline-block;
 }
 
-.info span {
-  font-weight: bold;
-}
-
-.total {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-}
-
-.total span {
-  font-size: 20px;
-  font-weight: bold;
+.carrito-btn-wrapper .q-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 50%;
+  z-index: 10;
 }
 
 /* ---------- CONTENEDOR ALERTAS---------- */
@@ -673,32 +616,5 @@ main {
   padding: 20px !important;
   background: rgb(228, 227, 227) !important;
   color: #222 !important;
-}
-
-/* ---------- BOTÓN PAGAR ---------- */
-.pagar {
-  padding: 15px 30px;
-  font-weight: 600;
-  background-color: #89a7fc;
-  color: #ffffff;
-  border-radius: 14px;
-  cursor: pointer;
-  border: none;
-  outline: none;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  transition: all 0.25s ease;
-}
-
-.pagar:hover {
-  background-color: #0044ff;
-  color: #ffffff;
-  transform: scale(1.05);
-}
-
-button:focus,
-button:active {
-  outline: none !important;
-  border: none !important;
-  box-shadow: none !important;
 }
 </style>
