@@ -17,5 +17,10 @@ export default defineConfig({
         new URL("./src/quasar-variables.sass", import.meta.url)
       )
     })
-  ]
+  ],
+  base: './',
+  build: {
+    outDir: 'dist',
+    emptyOutDir: true,
+  },
 });
