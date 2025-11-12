@@ -48,3 +48,6 @@
 | `lg`           | 32px              |
 | `xl`           | 40px              |
 | `2xl`          | 48px              |
+
+
+toda la informacion
