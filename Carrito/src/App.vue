@@ -1,180 +1,140 @@
 <template>
   <div>
-    <q-layout view="hHh Lpr lFf" class="bg-grey-1 hide-scrollbar">
-      <!-- HEADER -->
-      <q-header elevated class="bg-primary text-white">
+    <!-- ===========================================
+        ESTRUCTURA PRINCIPAL DEL LAYOUT
+        =========================================== -->
+    <q-layout view="hHh Lpp fFf" class="bg-grey-1 hide-scrollbar">
+      <!-- hHh = header fijo arriba -->
+      <!-- Lpr = drawers laterales -->
+      <!-- fFf = footer aparece al final al hacer scroll -->
+      <!-- =========================================================
+          ENCABEZADO (HEADER)
+          ========================================================= -->
+      <q-header class="bg-blue-grey-13 text-white">
         <q-toolbar>
-          <q-btn
-            flat
-            round
-            dense
-            icon="menu"
-            @click="drawerLeft = !drawerLeft"
-          />
-          <q-toolbar-title class="text-center"
-            >Carrito de Compras</q-toolbar-title
-          >
+          <q-btn flat round dense icon="menu" @click="drawerLeft = !drawerLeft" />
+          <q-toolbar-title class="text-center">Carrito de Compras</q-toolbar-title>
+
           <div class="carrito-btn-wrapper">
-            <q-btn
-              flat
-              round
-              dense
-              icon="shopping_cart"
-              @click="drawerRight = !drawerRight"
-            />
-            <q-badge
-              v-if="totalproductos > 0"
-              color="red"
-              text-color="white"
-              floating
-            >
+            <q-btn flat round dense icon="shopping_cart" @click="drawerRight = !drawerRight" />
+            <q-badge v-if="totalproductos > 0" color="red" text-color="white" floating>
               {{ totalproductos }}
             </q-badge>
           </div>
         </q-toolbar>
       </q-header>
 
-      <!-- DRAWER IZQUIERDO -->
-      <q-drawer
-        v-model="drawerLeft"
-        :width="220"
-        elevated
-        class="bg-primary text-white"
-      >
+      <!-- =========================================================
+          DRAWER IZQUIERDO
+          ========================================================= -->
+      <q-drawer v-model="drawerLeft" :width="220" class="text-white">
+        <div class="carrito-header q-pa-sm row items-center justify-between  text-white">
+          <q-btn flat round dense icon="arrow_circle_right" color="white" @click="drawerLeft = false" />
+          <div class="text-h6 text-center">Opciones</div>
+          <div style="width:32px"></div>
+        </div>
         <q-list>
-          <q-item clickable v-ripple>
-            <q-item-section>Inicio</q-item-section>
-          </q-item>
-          <q-item clickable v-ripple>
-            <q-item-section>Productos</q-item-section>
-          </q-item>
-          <q-item clickable v-ripple>
-            <q-item-section>Contacto</q-item-section>
-          </q-item>
+          <q-item clickable v-ripple><q-item-section>Inicio</q-item-section></q-item>
+          <q-item clickable v-ripple><q-item-section>Productos</q-item-section></q-item>
+          <q-item clickable v-ripple><q-item-section>Contacto</q-item-section></q-item>
         </q-list>
       </q-drawer>
 
-      <!-- DRAWER DERECHO -->
-      <q-drawer
-        side="right"
-        v-model="drawerRight"
-        bordered
-        :width="300"
-        :class="$q.dark.isActive ? 'bg-grey-9' : 'bg-grey-3'"
-        class="fijo-drawer"
-      >
-        <q-scroll-area class="fit">
-          <!-------------- TODO CARRITO ------------>
-          <div class="carritofijo q-pa-md">
+      <!-- =========================================================
+          DRAWER DERECHO
+          ========================================================= -->
+      <q-drawer side="right" v-model="drawerRight" bordered :width="300" class="carrito-fijo bg-white">
+        <div class="carritofijo q-pa-md">
+          <q-btn flat round dense icon="arrow_circle_left" @click="drawerRight = false" color="white" />
+          <div class="carro">
             <div class="carrito">
+              <h5 class="text-center q-py-lg">Carrito de Compras</h5>
               <p class="info row justify-between">
-                <strong>Total de Productos:</strong>
-                <span>{{ totalproductos }}</span>
+                <strong>Total de Productos:</strong> <span>{{ totalproductos }}</span>
               </p>
               <p class="info row justify-between">
-                <strong>Subtotal:</strong>
-                <span> COP ${{ subtotal }}</span>
+                <strong>Subtotal:</strong> <span>COP ${{ subtotal }}</span>
               </p>
               <p class="info row justify-between">
-                <strong>Impuesto (16%):</strong>
-                <span>COP ${{ impuesto }}</span>
+                <strong>Impuesto (16%):</strong> <span>COP ${{ impuesto }}</span>
               </p>
               <br />
               <div class="total row justify-between">
-                <h5>TOTAL</h5>
-                <span>COP ${{ total }}</span>
+                <h5>TOTAL</h5> <span>COP ${{ total }}</span>
               </div>
               <div class="pagar row justify-center q-my-md">
-                <q-btn
-                  @click="pagar"
-                  round
-                  color="positive"
-                  icon="shopping_cart"
-                />
+                <q-btn @click="pagar" round color="positive" icon="shopping_cart" />
               </div>
             </div>
           </div>
-        </q-scroll-area>
+        </div>
       </q-drawer>
 
-      <!-- CONTENIDO PRINCIPAL -->
-      <q-page-container>
+      <!-- =========================================================
+          CUERPO PRINCIPAL (MAIN)
+          ========================================================= -->
+      <q-page-container class="bg-white">
         <q-page>
+
+          <!-- =========================================================
+    SECCIÓN DE PRESENTACIÓN / HERO
+    ========================================================= -->
+          <section class="seccion-presentacion q-pa-xl">
+            <div class="row items-center justify-around q-gutter-xl">
+
+              <!-- Imagen -->
+              <div class="col-12 col-md-5 text-center">
+                <q-img :src="Logo" alt="Tecnología moderna" class="imagen-tecno" spinner-color="primary"
+                  transition="fade" />
+              </div>
+
+              <!-- Texto -->
+              <div class="col-12 col-md-5 text-center text-md-left">
+                <h1 class="titulo-principal q-mb-md">
+                  Bienvenido a <span class="resaltado">TuTiendaTech</span>
+                </h1>
+                <p class="descripcion">
+                  Esta es la tienda tecnológica donde encontrarás los mejores productos
+                  de última generación: laptops, procesadores, periféricos y mucho más.
+                  Innovación, calidad y precios increíbles, todo en un solo lugar ⚡
+                </p>
+                <q-btn color="primary" icon="shopping_cart" label="Explorar Productos" class="q-mt-lg" push glossy />
+              </div>
+            </div>
+          </section>
+
           <main>
-            <!-------------- ALERTA > 1000 ------------>
-            <q-banner
-              v-if="alerta"
-              class="bg-green-2 text-green-10 q-ma-md q-pa-sm shadow-2"
-              rounded
-              inline-actions
-            >
+            <q-banner v-if="alerta" class="bg-green-2 text-green-10 q-ma-xl q-pa-md shadow-2" rounded inline-actions>
               <template v-slot:avatar>
                 <q-icon name="local_shipping" color="green-8" />
               </template>
-
               {{ alerta }}
-
               <template v-slot:action>
-                <q-btn
-                  flat
-                  color="green-9"
-                  label="Ver detalles"
-                  @click="drawerRight = true"
-                />
+                <q-btn flat color="green-9" label="Ver detalles" @click="drawerRight = true" />
               </template>
             </q-banner>
 
             <div class="contenedor">
-              <!-------------- TODO DE PRODUCTOS ------------>
               <div class="productos q-pa-xl">
                 <div class="todoslosarticulos">
-                  <div
-                    class="articulo"
-                    v-for="(prod, index) in productos"
-                    :key="index"
-                  >
-                    <div class="img">
+                  <div class="articulo" v-for="(prod, index) in productos" :key="index">
+                    <div class="img" row justify-center>
                       <img :src="prod.imagen" :alt="prod.nombre" />
                     </div>
 
-                    <div class="infoarticulo text-center q-gutter-md">
+                    <div class="infoarticulo">
                       <h5>{{ prod.nombre }}</h5>
                       <p>{{ prod.descripcion }}</p>
                       <p>COP ${{ prod.precio }}</p>
                     </div>
 
                     <div class="cantidad">
-                      <q-btn
-                        class="botonagregar"
-                        v-if="!prod.agregado"
-                        @click="agregarAlCarrito(prod)"
-                        push
-                        color="positive"
-                        glossy
-                        icon="local_grocery_store"
-                        label="Agregar"
-                      />
-                      <div
-                        v-else
-                        class="controles-cantidad row items-center justify-between q-gutter-md"
-                      >
-                        <q-btn
-                          dense
-                          round
-                          color="negative"
-                          glossy
-                          icon="remove"
-                          @click="disminuirCantidad(prod)"
-                        />
+                      <q-btn class="botonagregar" v-if="!prod.agregado" @click="agregarAlCarrito(prod)" push
+                        color="positive" glossy icon="local_grocery_store" label="Agregar" />
+                      <div v-else class="controles-cantidad row items-center justify-between q-gutter-md">
+                        <q-btn dense round color="negative" glossy icon="remove" @click="disminuirCantidad(prod)" />
                         <span>{{ prod.cantidad }}</span>
-                        <q-btn
-                          dense
-                          round
-                          color="positive"
-                          glossy
-                          icon="add"
-                          @click="aumentarCantidad(prod)"
-                        />
+                        <q-btn dense round color="positive" glossy icon="add" @click="aumentarCantidad(prod)" />
                       </div>
                     </div>
                   </div>
@@ -184,6 +144,13 @@
           </main>
         </q-page>
       </q-page-container>
+
+      <!-- =========================================================
+          PIE DE PÁGINA (FOOTER)
+          ========================================================= -->
+      <q-footer class="bg-blue-grey-13 text-white text-center q-pa-md shadow-2">
+        <div>© 2025 TuTiendaTech — Todos los derechos reservados</div>
+      </q-footer>
     </q-layout>
   </div>
 </template>
@@ -202,6 +169,7 @@ import Tarjeta from "./assets/5090.png";
 import Teclado from "./assets/TECLADO.png";
 import Zowie from "./assets/ZOWIE.png";
 import Loq from "./assets/LOQ.png";
+import Logo from "./assets/LOGO.png";
 
 const drawerLeft = ref(false);
 const drawerRight = ref(false);
@@ -281,10 +249,8 @@ const productos = ref([
     precio: 120,
     cantidad: 1,
     agregado: false,
-  },
+  }
 ]);
-
-console.log(productos.value);
 
 /////////////// FUNCION AGREGAR ///////////////
 function agregarAlCarrito(prod) {
@@ -388,8 +354,15 @@ watch(total, (nuevototal) => {
 /////////////// LOCALSTORAGE ///////////////
 const guardados = localStorage.getItem("productos");
 if (guardados) {
-  productos.value = JSON.parse(guardados);
+  const productosGuardados = JSON.parse(guardados);
+
+  // Mezcla productos del código actual + guardados
+  const nombresGuardados = productosGuardados.map(p => p.nombre);
+  const nuevos = productos.value.filter(p => !nombresGuardados.includes(p.nombre));
+
+  productos.value = [...productosGuardados, ...nuevos];
 }
+
 
 watch(
   productos,
@@ -474,7 +447,6 @@ function pagar() {
 </script>
 
 <style>
-/* ---------- GLOBAL ---------- */
 * {
   margin: 0;
   padding: 0;
@@ -485,6 +457,11 @@ function pagar() {
   display: none;
 }
 
+.q-footer {
+  position: static !important;
+  bottom: auto !important;
+}
+
 body {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -493,7 +470,7 @@ body {
 html,
 body {
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   overflow-x: hidden;
   margin: 0;
   padding: 0;
@@ -504,54 +481,89 @@ body {
 #app {
   width: 100%;
   max-width: 1920px;
-  height: 100vh;
+  min-height: 100%;
   padding: 0;
   background: white;
   overflow: visible;
 }
 
-/* ---------- CONTENEDOR PRINCIPAL ---------- */
+/* ---------- CONTENEDOR PRINCIPAL DE PRODUCTOS ---------- */
+.todoslosarticulos {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+}
 
-.img {
+/* ---------- TARJETA INDIVIDUAL ---------- */
+.articulo {
+  width: 100%;
+  max-width: 330px;
+  min-height: 450px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 15px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+/* ---------- IMAGEN ---------- */
+.articulo .img {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 120px;
-  height: 120px;
+  height: 180px;
 }
 
-.img img {
+.articulo .img img {
   width: 100%;
   height: 100%;
   object-fit: contain;
+  border-radius: 10px;
 }
 
-/* ---------- CONTENEDOR PRINCIPAL ---------- */
-.contenedor {
-  display: flex;
-  justify-content: space-around;
-  width: 100%;
-}
-
-.todoslosarticulos {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 30px;
-  justify-items: center;
-}
-
-/* ---------- CONTENEDOR ARTICULO ---------- */
-.articulo {
+/* ---------- INFORMACIÓN ---------- */
+.infoarticulo {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  border-radius: 20px;
-  background: #f1f1f1;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08), 0 8px 20px rgba(0, 0, 0, 0.06);
-  padding: 20px;
+  justify-content: center;
+  text-align: center;
 }
 
+.infoarticulo h5 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #111;
+  line-height: 1.3;
+  min-height: 45px;
+}
+
+.infoarticulo p {
+  font-size: 0.95rem;
+  color: #444;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.infoarticulo p:nth-child(3) {
+  font-weight: 600;
+  color: #0011ff;
+  padding-top: 10px;
+}
+
+.articulo .infoarticulo h5 {
+  margin: 0;
+}
+
+.articulo .infoarticulo p {
+  margin: 0;
+}
+
+/* ---------- CANTIDAD CARRITO---------- */
 .carrito-btn-wrapper {
   position: relative;
   display: inline-block;
@@ -616,5 +628,38 @@ body {
   padding: 20px !important;
   background: rgb(228, 227, 227) !important;
   color: #222 !important;
+}
+
+/* ---------- PRESENTACION---------- */
+.seccion-presentacion {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.imagen-tecno {
+  width: 100%;
+  max-width: 800px;
+  height: auto;
+  border-radius: 20px;
+  object-fit: contain;
+}
+
+.titulo-principal {
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.resaltado {
+  color: #027be3;
+  /* azul Quasar */
+}
+
+.descripcion {
+  font-size: 1.1rem;
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 20px;
 }
 </style>
