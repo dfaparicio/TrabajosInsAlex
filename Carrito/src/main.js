@@ -1,7 +1,9 @@
 import { createApp } from 'vue'
-import { Quasar } from 'quasar'
-import './style.css'
+import { Quasar, Notify } from 'quasar'
+import quasarIconSet from 'quasar/icon-set/material-icons'
+import quasarLang from 'quasar/lang/es'
 import App from './App.vue'
+import './style.css'
 
 
 // (opcional) íconos de Material Icons
@@ -15,7 +17,9 @@ import 'quasar/src/css/index.sass'
 const app = createApp(App)
 
 app.use(Quasar, {
-  plugins: {}, // import Quasar plugins and add here
+  plugins: { Notify },
+  iconSet: quasarIconSet,
+  lang: quasarLang // import Quasar plugins and add here
 })
 
 // Assumes you have a <div id="app"></div> in your index.html

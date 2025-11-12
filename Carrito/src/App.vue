@@ -1,19 +1,16 @@
 <template>
   <div>
-    <!-- ===========================================
-        ESTRUCTURA PRINCIPAL DEL LAYOUT
-        =========================================== -->
-    <q-layout view="hHh Lpp fFf" class="bg-grey-1 hide-scrollbar">
+    <!-- ======= ESTRUCTURA PRINCIPAL DEL LAYOUT ======= -->
+    <q-layout view="hHh Lpr fFf" class="bg-grey-1 hide-scrollbar">
       <!-- hHh = header fijo arriba -->
       <!-- Lpr = drawers laterales -->
       <!-- fFf = footer aparece al final al hacer scroll -->
-      <!-- =========================================================
-          ENCABEZADO (HEADER)
-          ========================================================= -->
+
+      <!-- ======= ENCABEZADO (HEADER) ======= -->
       <q-header class="bg-blue-grey-13 text-white">
         <q-toolbar>
           <q-btn flat round dense icon="menu" @click="drawerLeft = !drawerLeft" />
-          <q-toolbar-title class="text-center">Carrito de Compras</q-toolbar-title>
+          <q-toolbar-title class="text-center text-white"> TuTiendaTech </q-toolbar-title>
 
           <div class="carrito-btn-wrapper">
             <q-btn flat round dense icon="shopping_cart" @click="drawerRight = !drawerRight" />
@@ -24,10 +21,8 @@
         </q-toolbar>
       </q-header>
 
-      <!-- =========================================================
-          DRAWER IZQUIERDO
-          ========================================================= -->
-      <q-drawer v-model="drawerLeft" :width="220" class="text-white">
+      <!-- ======= DRAWER IZQUIERDO ======= -->
+      <q-drawer v-model="drawerLeft" :width="220" class="text-white" bordered>
         <div class="carrito-header q-pa-sm row items-center justify-between  text-white">
           <q-btn flat round dense icon="arrow_circle_right" color="white" @click="drawerLeft = false" />
           <div class="text-h6 text-center">Opciones</div>
@@ -40,10 +35,8 @@
         </q-list>
       </q-drawer>
 
-      <!-- =========================================================
-          DRAWER DERECHO
-          ========================================================= -->
-      <q-drawer side="right" v-model="drawerRight" bordered :width="300" class="carrito-fijo bg-white">
+      <!-- ======= DRAWER DERECHO ======= -->
+      <q-drawer side="right" v-model="drawerRight" bordered :width="300" :heigth="200" class="carrito-fijo bg-white">
         <div class="carritofijo q-pa-md">
           <q-btn flat round dense icon="arrow_circle_left" @click="drawerRight = false" color="white" />
           <div class="carro">
@@ -70,41 +63,11 @@
         </div>
       </q-drawer>
 
-      <!-- =========================================================
-          CUERPO PRINCIPAL (MAIN)
-          ========================================================= -->
+      <!-- ======= CUERPO PRINCIPAL ======= -->
       <q-page-container class="bg-white">
         <q-page>
-
-          <!-- =========================================================
-    SECCIÓN DE PRESENTACIÓN / HERO
-    ========================================================= -->
-          <section class="seccion-presentacion q-pa-xl">
-            <div class="row items-center justify-around q-gutter-xl">
-
-              <!-- Imagen -->
-              <div class="col-12 col-md-5 text-center">
-                <q-img :src="Logo" alt="Tecnología moderna" class="imagen-tecno" spinner-color="primary"
-                  transition="fade" />
-              </div>
-
-              <!-- Texto -->
-              <div class="col-12 col-md-5 text-center text-md-left">
-                <h1 class="titulo-principal q-mb-md">
-                  Bienvenido a <span class="resaltado">TuTiendaTech</span>
-                </h1>
-                <p class="descripcion">
-                  Esta es la tienda tecnológica donde encontrarás los mejores productos
-                  de última generación: laptops, procesadores, periféricos y mucho más.
-                  Innovación, calidad y precios increíbles, todo en un solo lugar ⚡
-                </p>
-                <q-btn color="primary" icon="shopping_cart" label="Explorar Productos" class="q-mt-lg" push glossy />
-              </div>
-            </div>
-          </section>
-
           <main>
-            <q-banner v-if="alerta" class="bg-green-2 text-green-10 q-ma-xl q-pa-md shadow-2" rounded inline-actions>
+            <q-banner v-if="alerta" class="bg-green-2 text-green-10 q-ma-md q-pa-md shadow-2" rounded inline-actions>
               <template v-slot:avatar>
                 <q-icon name="local_shipping" color="green-8" />
               </template>
@@ -115,7 +78,7 @@
             </q-banner>
 
             <div class="contenedor">
-              <div class="productos q-pa-xl">
+              <div class="productos q-pa-md">
                 <div class="todoslosarticulos">
                   <div class="articulo" v-for="(prod, index) in productos" :key="index">
                     <div class="img" row justify-center>
@@ -145,9 +108,7 @@
         </q-page>
       </q-page-container>
 
-      <!-- =========================================================
-          PIE DE PÁGINA (FOOTER)
-          ========================================================= -->
+      <!-- ======= PIE DE PÁGINA  ======= -->
       <q-footer class="bg-blue-grey-13 text-white text-center q-pa-md shadow-2">
         <div>© 2025 TuTiendaTech — Todos los derechos reservados</div>
       </q-footer>
@@ -157,8 +118,8 @@
 
 <script setup>
 import { ref, computed, watch } from "vue";
-import Swal from "sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
+import { Notify } from "quasar";
 
 import Tv from "./assets/TV.png";
 import Msi from "./assets/MSI.png";
@@ -169,7 +130,13 @@ import Tarjeta from "./assets/5090.png";
 import Teclado from "./assets/TECLADO.png";
 import Zowie from "./assets/ZOWIE.png";
 import Loq from "./assets/LOQ.png";
-import Logo from "./assets/LOGO.png";
+import Asus from "./assets/ASUSROG.png";
+import Razer from "./assets/RAZER.png";
+import Steel from "./assets/STEELSERIES.png";
+import T7900 from "./assets/7900.png";
+import T4080 from "./assets/4080.png";
+import RazerV3 from "./assets/RAZERV3.png";
+import Glorius from "./assets/GLORIUS.png";
 
 const drawerLeft = ref(false);
 const drawerRight = ref(false);
@@ -249,6 +216,62 @@ const productos = ref([
     precio: 120,
     cantidad: 1,
     agregado: false,
+  },
+  {
+    nombre: "Razer Blade 16",
+    descripcion: "Laptop gamer premium con RTX 4090 y pantalla QHD+ de 240Hz.",
+    imagen: Razer,
+    precio: 4200,
+    cantidad: 1,
+    agregado: false,
+  },
+  {
+    nombre: "ASUS ROG Zephyrus G14",
+    descripcion: "Portátil potente y compacto con Ryzen 9 y RTX 4070.",
+    imagen: Asus,
+    precio: 2500,
+    cantidad: 1,
+    agregado: false,
+  },
+  {
+    nombre: "ROG Strix RTX 4080 SUPER 16GB OC",
+    descripcion: "GPU de alto rendimiento con trazado de rayos y DLSS 3.",
+    imagen: T4080,
+    precio: 1200,
+    cantidad: 1,
+    agregado: false,
+  },
+  {
+    nombre: "AMD Radeon RX 7900 XT",
+    descripcion: "Tarjeta gráfica RDNA 3 con gran potencia y eficiencia.",
+    imagen: T7900,
+    precio: 950,
+    cantidad: 1,
+    agregado: false,
+  },
+  {
+    nombre: "SteelSeries Apex Pro TKL",
+    descripcion: "Teclado mecánico premium con switches ajustables OmniPoint.",
+    imagen: Steel,
+    precio: 200,
+    cantidad: 1,
+    agregado: false,
+  },
+  {
+    nombre: "Razer DeathAdder V3",
+    descripcion: "Ratón ergonómico ultraligero con sensor Focus Pro 30K.",
+    imagen: RazerV3,
+    precio: 150,
+    cantidad: 1,
+    agregado: false,
+  },
+  {
+    nombre: "Glorious Model O 2",
+    descripcion: "Mouse ultraligero de alto rendimiento para eSports.",
+    imagen: Glorius,
+    precio: 120,
+    cantidad: 1,
+    agregado: false,
   }
 ]);
 
@@ -256,64 +279,54 @@ const productos = ref([
 function agregarAlCarrito(prod) {
   prod.agregado = true;
   prod.cantidad = 1;
-  Swal.fire({
-    toast: true,
-    position: "top-end",
-    icon: "success",
-    title: `${prod.nombre} fue añadido al carrito`,
-    imageUrl: prod.imagen,
-    customClass: {
-      popup: "toast-carrito",
-    },
-    showConfirmButton: false,
-    timer: 1500,
+
+  Notify.create({
+    message: `${prod.nombre} fue añadido al carrito`,
+    caption: "Agregado correctamente",
+    color: "positive",
+    position: "top-right",
+    timeout: 1800,
+    icon: "shopping_cart",
   });
 }
+
 /////////////// FUNCION AUMENTAR ///////////////
 function aumentarCantidad(prod) {
   prod.cantidad++;
-  Swal.fire({
-    toast: true,
-    position: "top-end",
-    icon: "success",
-    title: `Agregaste una unidad más de ${prod.nombre}`,
-    imageUrl: prod.imagen,
-    customClass: {
-      popup: "toast-carrito",
-    },
-    showConfirmButton: false,
-    timer: 1500,
+
+  Notify.create({
+    message: `Agregaste una unidad más de ${prod.nombre}`,
+    caption: `Total: ${prod.cantidad}`,
+    color: "positive",
+    position: "top-right",
+    timeout: 1500,
+    icon: "add_circle",
   });
 }
+
 /////////////// FUNCION DISMINUIR ///////////////
 function disminuirCantidad(prod) {
   if (prod.cantidad > 1) {
     prod.cantidad--;
-    Swal.fire({
-      toast: true,
-      position: "top-end",
-      icon: "info",
-      title: `Quitaste una unidad de ${prod.nombre}`,
-      imageUrl: prod.imagen,
-      customClass: {
-        popup: "toast-carrito",
-      },
-      showConfirmButton: false,
-      timer: 1500,
+
+    Notify.create({
+      message: `Quitaste una unidad de ${prod.nombre}`,
+      caption: `Total: ${prod.cantidad}`,
+      color: "info",
+      position: "top-right",
+      timeout: 1500,
+      icon: "remove_circle",
     });
   } else {
     prod.agregado = false;
-    Swal.fire({
-      toast: true,
-      position: "top-end",
-      icon: "error",
-      title: `${prod.nombre} fue eliminado del carrito`,
-      imageUrl: prod.imagen,
-      customClass: {
-        popup: "toast-carrito",
-      },
-      showConfirmButton: false,
-      timer: 1500,
+
+    Notify.create({
+      message: `${prod.nombre} fue eliminado del carrito`,
+      caption: "Producto removido",
+      color: "negative",
+      position: "top-right",
+      timeout: 1500,
+      icon: "delete",
     });
   }
 }
@@ -332,7 +345,7 @@ const subtotal = computed(() => {
 });
 
 const impuesto = computed(() => {
-  return subtotal.value * 0.16;
+  return Number((subtotal.value * 0.16).toFixed(2));
 });
 
 const total = computed(() => {
@@ -354,15 +367,8 @@ watch(total, (nuevototal) => {
 /////////////// LOCALSTORAGE ///////////////
 const guardados = localStorage.getItem("productos");
 if (guardados) {
-  const productosGuardados = JSON.parse(guardados);
-
-  // Mezcla productos del código actual + guardados
-  const nombresGuardados = productosGuardados.map(p => p.nombre);
-  const nuevos = productos.value.filter(p => !nombresGuardados.includes(p.nombre));
-
-  productos.value = [...productosGuardados, ...nuevos];
+  productos.value = JSON.parse(guardados);
 }
-
 
 watch(
   productos,
@@ -394,77 +400,82 @@ if (resumenGuardado) {
 
 /////////////// FUNCION PAGAR ///////////////
 function pagar() {
-  const productosEnCarrito = productos.value.filter((p) => p.agregado);
+  const productosEnCarrito = productos.value.filter(p => p.agregado);
 
   if (productosEnCarrito.length === 0) {
-    Swal.fire({
-      toast: true,
-      position: "top-end",
+    Notify.create({
+      message: "Tu carrito está vacío 🛒",
+      color: "info",
+      position: "top-right",
+      timeout: 1500,
       icon: "info",
-      title: "Tu carrito está vacío 🛒",
-      showConfirmButton: false,
-      timer: 1800,
-      background: "#fff",
-      customClass: { popup: "alerta-nueva" },
     });
     return;
   }
 
-  Swal.fire({
-    toast: true,
-    title: "¿Deseas completar tu compra?",
-    html: `Total a pagar: <strong>COP $${total.value}</strong>`,
-    icon: "question",
-    showCancelButton: true,
-    confirmButtonText: "Sí, pagar ahora",
-    cancelButtonText: "Cancelar",
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    customClass: { popup: "alerta-pago" },
-  }).then((result) => {
-    if (result.isConfirmed) {
-      productos.value.forEach((p) => {
-        p.agregado = false;
-        p.cantidad = 1;
-      });
+  Notify.create({
+    message: `Total a pagar: COP $${total.value}`,
+    caption: "Haz clic para confirmar el pago",
+    color: "yellow",
+    position: "top-right",
+    timeout: 0,
+    icon: "payment",
+    actions: [
+      {
+        label: "Pagar",
+        color: "green",
+        handler: () => {
+          productos.value.forEach(p => {
+            p.agregado = false;
+            p.cantidad = 1;
+          });
+          localStorage.setItem("productos", JSON.stringify(productos.value));
 
-      localStorage.setItem("productos", JSON.stringify(productos.value));
-
-      Swal.fire({
-        toast: true,
-        toast: true,
-        position: "top-end",
-        icon: "success",
-        title: "¡Pago completado!",
-        text: "Gracias por tu compra",
-        showConfirmButton: false,
-        timer: 1700,
-        customClass: { popup: "alerta-nueva" },
-      });
-    }
+          Notify.create({
+            message: "¡Pago completado!",
+            color: "positive",
+            position: "top-right",
+            timeout: 1500,
+            icon: "check_circle",
+            avatar: productosEnCarrito[0].imagen,
+          });
+        }
+      },
+      {
+        label: "Cancelar",
+        color: "red",
+        handler: () => {
+          Notify.create({
+            message: "Pago cancelado",
+            color: "negative",
+            position: "top-right",
+            timeout: 1200,
+            icon: "close",
+          });
+        }
+      }
+    ]
   });
 }
+
+/////////////// WATCH PARA SCROLL CARRITO ///////////////
+watch(drawerRight, (nuevoValor) => {
+  if (nuevoValor === true) {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  }
+});
 </script>
 
 <style>
+/* ---------- RESET Y BASE ---------- */
 * {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
   color: black;
-}
-
-::-webkit-scrollbar {
-  display: none;
-}
-
-.q-footer {
-  position: static !important;
-  bottom: auto !important;
-}
-
-body {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
 }
 
 html,
@@ -472,19 +483,61 @@ body {
   width: 100%;
   min-height: 100%;
   overflow-x: hidden;
-  margin: 0;
-  padding: 0;
   background: white;
 }
 
-/* ---------- APP---------- */
+body {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* ---------- APP ---------- */
 #app {
   width: 100%;
   max-width: 1920px;
   min-height: 100%;
-  padding: 0;
   background: white;
-  overflow: visible;
+}
+
+/* ---------- HEADER, FOOTER Y LAYOUT ---------- */
+.q-footer {
+  position: static !important;
+  bottom: auto !important;
+}
+
+/* ---------- PRESENTACIÓN ---------- */
+.seccion-presentacion {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.imagen-tecno {
+  width: 100%;
+  max-width: 800px;
+  border-radius: 20px;
+  object-fit: contain;
+}
+
+.titulo-principal {
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.resaltado {
+  color: #027be3;
+}
+
+.descripcion {
+  font-size: 1.1rem;
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 20px;
 }
 
 /* ---------- CONTENEDOR PRINCIPAL DE PRODUCTOS ---------- */
@@ -510,7 +563,7 @@ body {
   padding: 20px;
 }
 
-/* ---------- IMAGEN ---------- */
+/* ---------- IMAGEN DEL PRODUCTO ---------- */
 .articulo .img {
   display: flex;
   justify-content: center;
@@ -526,7 +579,7 @@ body {
   border-radius: 10px;
 }
 
-/* ---------- INFORMACIÓN ---------- */
+/* ---------- INFORMACIÓN DEL PRODUCTO ---------- */
 .infoarticulo {
   display: flex;
   flex-direction: column;
@@ -540,6 +593,7 @@ body {
   color: #111;
   line-height: 1.3;
   min-height: 45px;
+  margin: 0;
 }
 
 .infoarticulo p {
@@ -549,21 +603,14 @@ body {
   margin: 0;
 }
 
+
 .infoarticulo p:nth-child(3) {
   font-weight: 600;
   color: #0011ff;
   padding-top: 10px;
 }
 
-.articulo .infoarticulo h5 {
-  margin: 0;
-}
-
-.articulo .infoarticulo p {
-  margin: 0;
-}
-
-/* ---------- CANTIDAD CARRITO---------- */
+/* ---------- BOTONES DE CANTIDAD EN CARRITO ---------- */
 .carrito-btn-wrapper {
   position: relative;
   display: inline-block;
@@ -579,87 +626,9 @@ body {
   z-index: 10;
 }
 
-/* ---------- CONTENEDOR ALERTAS---------- */
-.swal2-container {
+.cantidad .controles-cantidad {
   display: flex;
-  justify-content: center;
   align-items: center;
-  z-index: 999999 !important;
-  position: fixed !important;
-  right: 5% !important;
-  width: 450px !important;
-  pointer-events: none !important;
-}
-
-.swal2-popup {
-  border-radius: 14px !important;
-  font-size: 0.95rem !important;
-  padding: 14px 16px !important;
-  width: 100% !important;
-  display: flex !important;
-  align-items: center !important;
-  gap: 12px !important;
-}
-
-.swal2-image {
-  width: 80px !important;
-  height: 80px !important;
-  border-radius: 8px !important;
-  object-fit: contain !important;
-}
-
-.alerta-nueva {
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  justify-content: center !important;
-  text-align: center !important;
-  width: 340px !important;
-  height: auto !important;
-  padding: 15px !important;
-  border-radius: 12px !important;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
-}
-
-.alerta-pago {
-  display: flex;
-  flex-direction: column;
-  border-radius: 14px !important;
-  padding: 20px !important;
-  background: rgb(228, 227, 227) !important;
-  color: #222 !important;
-}
-
-/* ---------- PRESENTACION---------- */
-.seccion-presentacion {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.imagen-tecno {
-  width: 100%;
-  max-width: 800px;
-  height: auto;
-  border-radius: 20px;
-  object-fit: contain;
-}
-
-.titulo-principal {
-  font-weight: 700;
-  color: #1a1a1a;
-}
-
-.resaltado {
-  color: #027be3;
-  /* azul Quasar */
-}
-
-.descripcion {
-  font-size: 1.1rem;
-  color: #555;
-  line-height: 1.6;
-  margin-bottom: 20px;
+  justify-content: space-between;
 }
 </style>
