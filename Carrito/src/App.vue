@@ -9,12 +9,31 @@
       <!-- ======= ENCABEZADO (HEADER) ======= -->
       <q-header class="bg-blue-grey-13 text-white">
         <q-toolbar>
-          <q-btn flat round dense icon="menu" @click="drawerLeft = !drawerLeft" />
-          <q-toolbar-title class="text-center text-white"> TuTiendaTech </q-toolbar-title>
+          <q-btn
+            flat
+            round
+            dense
+            icon="menu"
+            @click="drawerLeft = !drawerLeft"
+          />
+          <q-toolbar-title class="text-center text-white">
+            TuTiendaTech
+          </q-toolbar-title>
 
           <div class="carrito-btn-wrapper">
-            <q-btn flat round dense icon="shopping_cart" @click="drawerRight = !drawerRight" />
-            <q-badge v-if="totalproductos > 0" color="red" text-color="white" floating>
+            <q-btn
+              flat
+              round
+              dense
+              icon="shopping_cart"
+              @click="drawerRight = !drawerRight"
+            />
+            <q-badge
+              v-if="totalproductos > 0"
+              color="red"
+              text-color="white"
+              floating
+            >
               {{ totalproductos }}
             </q-badge>
           </div>
@@ -23,40 +42,77 @@
 
       <!-- ======= DRAWER IZQUIERDO ======= -->
       <q-drawer v-model="drawerLeft" :width="220" class="text-white" bordered>
-        <div class="carrito-header q-pa-sm row items-center justify-between  text-white">
-          <q-btn flat round dense icon="arrow_circle_right" color="white" @click="drawerLeft = false" />
+        <div
+          class="carrito-header q-pa-sm row items-center justify-between text-white"
+        >
+          <q-btn
+            flat
+            round
+            dense
+            icon="arrow_circle_right"
+            color="white"
+            @click="drawerLeft = false"
+          />
           <div class="text-h6 text-center">Opciones</div>
-          <div style="width:32px"></div>
+          <div style="width: 32px"></div>
         </div>
         <q-list>
-          <q-item clickable v-ripple><q-item-section>Inicio</q-item-section></q-item>
-          <q-item clickable v-ripple><q-item-section>Productos</q-item-section></q-item>
-          <q-item clickable v-ripple><q-item-section>Contacto</q-item-section></q-item>
+          <q-item clickable v-ripple
+            ><q-item-section>Inicio</q-item-section></q-item
+          >
+          <q-item clickable v-ripple
+            ><q-item-section>Productos</q-item-section></q-item
+          >
+          <q-item clickable v-ripple
+            ><q-item-section>Contacto</q-item-section></q-item
+          >
         </q-list>
       </q-drawer>
 
       <!-- ======= DRAWER DERECHO ======= -->
-      <q-drawer side="right" v-model="drawerRight" bordered :width="300" :heigth="200" class="carrito-fijo bg-white">
+      <q-drawer
+        side="right"
+        v-model="drawerRight"
+        bordered
+        :width="300"
+        :heigth="200"
+        class="carrito-fijo bg-white"
+      >
         <div class="carritofijo q-pa-md">
-          <q-btn flat round dense icon="arrow_circle_left" @click="drawerRight = false" color="white" />
+          <q-btn
+            flat
+            round
+            dense
+            icon="arrow_circle_left"
+            @click="drawerRight = false"
+            color="white"
+          />
           <div class="carro">
             <div class="carrito">
               <h5 class="text-center q-py-lg">Carrito de Compras</h5>
               <p class="info row justify-between">
-                <strong>Total de Productos:</strong> <span>{{ totalproductos }}</span>
+                <strong>Total de Productos:</strong>
+                <span>{{ totalproductos }}</span>
               </p>
               <p class="info row justify-between">
                 <strong>Subtotal:</strong> <span>COP ${{ subtotal }}</span>
               </p>
               <p class="info row justify-between">
-                <strong>Impuesto (16%):</strong> <span>COP ${{ impuesto }}</span>
+                <strong>Impuesto (16%):</strong>
+                <span>COP ${{ impuesto }}</span>
               </p>
               <br />
               <div class="total row justify-between">
-                <h5>TOTAL</h5> <span>COP ${{ total }}</span>
+                <h5>TOTAL</h5>
+                <span>COP ${{ total }}</span>
               </div>
               <div class="pagar row justify-center q-my-md">
-                <q-btn @click="pagar" round color="positive" icon="shopping_cart" />
+                <q-btn
+                  @click="pagar"
+                  round
+                  color="positive"
+                  icon="shopping_cart"
+                />
               </div>
             </div>
           </div>
@@ -67,20 +123,42 @@
       <q-page-container class="bg-white">
         <q-page>
           <main>
-            <q-banner v-if="alerta" class="bg-green-2 text-green-10 q-ma-md q-pa-md shadow-2" rounded inline-actions>
-              <template v-slot:avatar>
-                <q-icon name="local_shipping" color="green-8" />
-              </template>
-              {{ alerta }}
-              <template v-slot:action>
-                <q-btn flat color="green-9" label="Ver detalles" @click="drawerRight = true" />
-              </template>
+            <q-banner
+              v-if="alerta"
+              class="bg-green-2 text-green-10 q-ma-md q-pa-md shadow-2"
+              rounded
+              inline-actions
+            >
+              <div
+                class="alertas column justify-center items-center q-gutter-md"
+              >
+                <div class="column justify-center items-center">
+                  <div>
+                    <q-icon size="40px" name="local_shipping" color="green-8" />
+                  </div>
+                  <div>{{ alerta }}</div>
+                </div>
+                <div>
+                  <q-btn
+                    push
+                    color="positive"
+                    glossy
+                    icon-right="arrow_forward"
+                    label="Ver detalles"
+                    @click="drawerRight = true"
+                  />
+                </div>
+              </div>
             </q-banner>
 
             <div class="contenedor">
               <div class="productos q-pa-md">
                 <div class="todoslosarticulos">
-                  <div class="articulo" v-for="(prod, index) in productos" :key="index">
+                  <div
+                    class="articulo"
+                    v-for="(prod, index) in productos"
+                    :key="index"
+                  >
                     <div class="img" row justify-center>
                       <img :src="prod.imagen" :alt="prod.nombre" />
                     </div>
@@ -92,12 +170,37 @@
                     </div>
 
                     <div class="cantidad">
-                      <q-btn class="botonagregar" v-if="!prod.agregado" @click="agregarAlCarrito(prod)" push
-                        color="positive" glossy icon="local_grocery_store" label="Agregar" />
-                      <div v-else class="controles-cantidad row items-center justify-between q-gutter-md">
-                        <q-btn dense round color="negative" glossy icon="remove" @click="disminuirCantidad(prod)" />
+                      <q-btn
+                        class="botonagregar"
+                        v-if="!prod.agregado"
+                        @click="agregarAlCarrito(prod)"
+                        push
+                        color="positive"
+                        glossy
+                        icon="local_grocery_store"
+                        label="Agregar"
+                      />
+                      <div
+                        v-else
+                        class="controles-cantidad row items-center justify-between q-gutter-md"
+                      >
+                        <q-btn
+                          dense
+                          round
+                          color="negative"
+                          glossy
+                          icon="remove"
+                          @click="disminuirCantidad(prod)"
+                        />
                         <span>{{ prod.cantidad }}</span>
-                        <q-btn dense round color="positive" glossy icon="add" @click="aumentarCantidad(prod)" />
+                        <q-btn
+                          dense
+                          round
+                          color="positive"
+                          glossy
+                          icon="add"
+                          @click="aumentarCantidad(prod)"
+                        />
                       </div>
                     </div>
                   </div>
@@ -272,7 +375,7 @@ const productos = ref([
     precio: 120,
     cantidad: 1,
     agregado: false,
-  }
+  },
 ]);
 
 /////////////// FUNCION AGREGAR ///////////////
@@ -400,7 +503,7 @@ if (resumenGuardado) {
 
 /////////////// FUNCION PAGAR ///////////////
 function pagar() {
-  const productosEnCarrito = productos.value.filter(p => p.agregado);
+  const productosEnCarrito = productos.value.filter((p) => p.agregado);
 
   if (productosEnCarrito.length === 0) {
     Notify.create({
@@ -425,7 +528,7 @@ function pagar() {
         label: "Pagar",
         color: "green",
         handler: () => {
-          productos.value.forEach(p => {
+          productos.value.forEach((p) => {
             p.agregado = false;
             p.cantidad = 1;
           });
@@ -439,7 +542,7 @@ function pagar() {
             icon: "check_circle",
             avatar: productosEnCarrito[0].imagen,
           });
-        }
+        },
       },
       {
         label: "Cancelar",
@@ -452,9 +555,9 @@ function pagar() {
             timeout: 1200,
             icon: "close",
           });
-        }
-      }
-    ]
+        },
+      },
+    ],
   });
 }
 
@@ -463,7 +566,7 @@ watch(drawerRight, (nuevoValor) => {
   if (nuevoValor === true) {
     window.scrollTo({
       top: 0,
-      behavior: "smooth"
+      behavior: "smooth",
     });
   }
 });
@@ -603,7 +706,6 @@ body {
   margin: 0;
 }
 
-
 .infoarticulo p:nth-child(3) {
   font-weight: 600;
   color: #0011ff;
@@ -630,5 +732,20 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+@media (max-width: 600px) {
+  .q-banner {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  .q-banner_avatar {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
 }
 </style>
