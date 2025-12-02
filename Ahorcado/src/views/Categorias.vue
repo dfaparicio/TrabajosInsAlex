@@ -1,28 +1,28 @@
 <template>
-  <CardInicio
-    titulo="Selecciona las categorias, sin miedo.."
-    class="column justify-center items-center"
-  >
+  <CardInicio titulo="Selecciona las categorias, sin miedo.." class="column justify-center items-center">
     <div class="column q-gutter-xl">
       <div class="categoriaimg q-ma-none">
-        <div><img :src="LocoJugar" class="flex justify-center items-center"></div>
+        <div><img :src="LocoJugar"></div>
+
         <div class="cards q-ma-none">
-          <CardPequeña color="" :imagen="Animales" titulo="Animales" />
-          <CardPequeña color="" :imagen="Instrumentos" titulo="Instrumentos" />
-          <CardPequeña color="" :imagen="Deportes" titulo="Deportes" />
-          <CardPequeña color="" :imagen="Videojuegos" titulo="Videojuegos" />
-          <CardPequeña color="" :imagen="Peliculas" titulo="Peliculas" />
-          <CardPequeña color="" :imagen="Ciencia" titulo="Ciencia" />
+          <CardPequeña :imagen="Animales" titulo="animales" @select="seleccionarcat" />
+          <CardPequeña :imagen="Instrumentos" titulo="instrumentos" @select="seleccionarcat" />
+          <CardPequeña :imagen="Deportes" titulo="deportes" @select="seleccionarcat" />
+          <CardPequeña :imagen="Videojuegos" titulo="videojuegos" @select="seleccionarcat" />
+          <CardPequeña :imagen="Peliculas" titulo="peliculas" @select="seleccionarcat" />
+          <CardPequeña :imagen="Ciencia" titulo="ciencia" @select="seleccionarcat" />
         </div>
       </div>
+
       <div class="flex justify-center q-ma-none q-pt-xl">
-        <BotonIniciar to="/niveles">Siguiente, RAPIDOOO!!</BotonIniciar>
+        <BotonIniciar :to="`/niveles?cat=${categoria}`">Siguiente, RAPIDOOO!!</BotonIniciar>
       </div>
     </div>
   </CardInicio>
 </template>
 
 <script setup>
+import { ref } from "vue";
 import BotonIniciar from "../components/BotonIniciar.vue";
 import CardInicio from "../components/CardInicio.vue";
 import CardPequeña from "../components/CardPequeña.vue";
@@ -35,6 +35,13 @@ import Peliculas from "../assets/Peliculas.png";
 import Ciencia from "../assets/Ciencia.png";
 
 import LocoJugar from "../assets/LocoJugar.png";
+
+const categoria = ref("");
+
+function seleccionarcat(cat) {
+  categoria.value = cat.toLowerCase();
+  console.log("Seleccionaste:", categoria.value);
+}
 </script>
 
 <style scoped>
@@ -44,7 +51,7 @@ import LocoJugar from "../assets/LocoJugar.png";
   gap: 50px;
 }
 
-.categoriaimg{
+.categoriaimg {
   display: flex;
   justify-content: center;
   align-items: center;

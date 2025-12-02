@@ -84,17 +84,33 @@ import { useQuasar, Notify } from "quasar";
 import { useRouter } from "vue-router";
 
 const drawer = ref(false);
-const usuarioActual = ref(localStorage.getItem("usuarioActual") || null);
-
 const $q = useQuasar();
 const router = useRouter();
+
+const usuarioActual = ref(localStorage.getItem("usuarioActual") || null);
 
 router.afterEach(() => {
   usuarioActual.value = localStorage.getItem("usuarioActual");
 });
 
+// Cada vez que navegas por tu app, Vue toma el usuario actualizado del localStorage y lo muestra en el drawer.
 
 function cerrarSesion() {
+
+  if (!usuarioActual.value) {
+    Notify.create({
+      message: "No hay sesión activa",
+      caption: "Primero inicia sesión.",
+      color: "white",
+      textColor: "red-7",
+      classes: "text-bold text-h6 shadow-10 grito-notify",
+      icon: "warning",
+      position: "top",
+      timeout: 1500
+    });
+    return;
+  }
+
   drawer.value = false;
 
   $q.loading.show({
@@ -121,7 +137,7 @@ function cerrarSesion() {
       caption: "El espíritu te deja ir... por ahora.",
       color: "white",
       textColor: "red-7",
-      classes: "text-bold text-h6 shadow-10",
+      classes: "text-bold text-h6 shadow-10 grito-notify",
       icon: "logout",
       position: "top",
       timeout: 2000
@@ -182,6 +198,48 @@ body {
 
 .img-oscura img {
   filter: brightness(0.35);
-  /* más oscuro */
 }
+
+.grito-notify {
+  animation: temblorLoco 0.1s infinite, glitchColorLoco 0.15s infinite alternate, zoomLoco 0.4s infinite alternate !important;
+  letter-spacing: 5px !important;
+  font-size: 25px !important;          
+  background: rgba(0, 0, 0, 0.7) !important; 
+  padding: 12px 24px !important;
+  border-radius: 12px !important;
+  text-transform: uppercase !important;
+  text-align: center !important;
+  display: inline-block !important;
+  max-width: 90% !important;
+}
+
+@keyframes temblorLoco {
+  0%   { transform: translate(0,0) rotate(0deg); }
+  10%  { transform: translate(-3px,2px) rotate(-2deg); }
+  20%  { transform: translate(4px,-3px) rotate(1deg); }
+  30%  { transform: translate(-2px,4px) rotate(-1deg); }
+  40%  { transform: translate(3px,-2px) rotate(2deg); }
+  50%  { transform: translate(-4px,1px) rotate(-1deg); }
+  60%  { transform: translate(2px,-3px) rotate(1deg); }
+  70%  { transform: translate(-1px,3px) rotate(-2deg); }
+  80%  { transform: translate(3px,-1px) rotate(2deg); }
+  90%  { transform: translate(-2px,2px) rotate(-1deg); }
+  100% { transform: translate(0,0) rotate(0deg); }
+}
+
+@keyframes glitchColorLoco {
+  0%   { text-shadow: 2px 0 red, -2px 0 blue, 0 2px lime; }
+  20%  { text-shadow: -2px 1px blue, 2px -1px lime, 1px 0 red; }
+  40%  { text-shadow: 3px -2px lime, -3px 2px red, 0 0 blue; }
+  60%  { text-shadow: -1px 3px red, 1px -2px blue, 2px 0 lime; }
+  80%  { text-shadow: 2px -1px lime, -2px 1px blue, 0 3px red; }
+  100% { text-shadow: 3px 0 red, -3px 0 blue, 1px -1px lime; }
+}
+
+@keyframes zoomLoco {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
 </style>

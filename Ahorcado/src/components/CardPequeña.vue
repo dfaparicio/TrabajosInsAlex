@@ -1,8 +1,6 @@
 <template>
-  <q-card
-    :style="{ backgroundColor: color }"
-    class="card-pequena flex flex-column items-center justify-start"
-  >
+  <q-card :style="{ backgroundColor: color }" class="card-pequena flex flex-column items-center justify-start"
+    @click="$emit('select', titulo)">
     <div class="img-container">
       <q-img :src="imagen" class="img-bw" />
       <div class="text-center text-subtitle1">{{ titulo }}</div>
@@ -11,12 +9,15 @@
 </template>
 
 <script setup>
-const props = defineProps({
+defineProps({
   color: { type: String, default: "#ffffff" },
   imagen: { type: String, required: true },
   titulo: { type: String, required: true },
 });
+
+defineEmits(["select"]);
 </script>
+
 
 <style scoped>
 .card-pequena {
