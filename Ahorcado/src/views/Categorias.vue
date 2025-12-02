@@ -5,12 +5,23 @@
         <div><img :src="LocoJugar"></div>
 
         <div class="cards q-ma-none">
-          <CardPequeña :imagen="Animales" titulo="animales" @select="seleccionarcat" />
-          <CardPequeña :imagen="Instrumentos" titulo="instrumentos" @select="seleccionarcat" />
-          <CardPequeña :imagen="Deportes" titulo="deportes" @select="seleccionarcat" />
-          <CardPequeña :imagen="Videojuegos" titulo="videojuegos" @select="seleccionarcat" />
-          <CardPequeña :imagen="Peliculas" titulo="peliculas" @select="seleccionarcat" />
-          <CardPequeña :imagen="Ciencia" titulo="ciencia" @select="seleccionarcat" />
+          <CardPequeña :imagen="Animales" titulo="animales" :selected="categoria === 'animales'"
+            @select="seleccionarcat" />
+
+          <CardPequeña :imagen="Instrumentos" titulo="instrumentos" :selected="categoria === 'instrumentos'"
+            @select="seleccionarcat" />
+
+          <CardPequeña :imagen="Deportes" titulo="deportes" :selected="categoria === 'deportes'"
+            @select="seleccionarcat" />
+
+          <CardPequeña :imagen="Videojuegos" titulo="videojuegos" :selected="categoria === 'videojuegos'"
+            @select="seleccionarcat" />
+
+          <CardPequeña :imagen="Peliculas" titulo="peliculas" :selected="categoria === 'peliculas'"
+            @select="seleccionarcat" />
+
+          <CardPequeña :imagen="Ciencia" titulo="ciencia" :selected="categoria === 'ciencia'"
+            @select="seleccionarcat" />
         </div>
       </div>
 

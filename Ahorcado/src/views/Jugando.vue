@@ -6,35 +6,44 @@
         <div><strong>{{ categoria }}</strong></div>
         <div><strong>{{ nivel }}</strong></div>
         <div><strong>Intentos: {{ intentos }}</strong></div>
+        <div><strong>Tiempo: {{ tiempocontado }}</strong></div>
       </div>
 
       <div class="ordenar row justify-center items-center q-gutter-xl">
-        <div><img :src="LocoJugar" alt="" /></div>
+        <div class="imagenes">
+          <img :src="imgahorcado" alt="Ahorcado" />
+        </div>
 
         <div class="flex column justify-center items-center">
           <div class="bases">
-            <div class="slot" v-for="(s, i) in slots" :key="i">{{ s }}</div>
+            <div class="slot" v-for="(slot, index) in slots" :key="index">{{ slot }}</div>
           </div>
-          <div>alertas</div>
         </div>
       </div>
 
-      <div>
-        <div class="teclado">
-          <div class="fila">
-            <button>Q</button><button>W</button><button>E</button><button>R</button>
-            <button>T</button><button>Y</button><button>U</button><button>I</button>
-            <button>O</button><button>P</button>
-          </div>
-          <div class="fila">
-            <button>A</button><button>S</button><button>D</button><button>F</button>
-            <button>G</button><button>H</button><button>J</button><button>K</button>
-            <button>L</button>
-          </div>
-          <div class="fila">
-            <button>Z</button><button>X</button><button>C</button><button>V</button>
-            <button>B</button><button>N</button><button>M</button>
-          </div>
+      <div v-if="!juegoterminado" class="teclado">
+        <div class="fila" v-for="(fila, index) in teclado" :key="index">
+          <button v-for="letra in fila" :key="letra.letra" @click="seleccionarletra(letra)"
+            :class="{ verde: letra.mostrarVerde, rojo: letra.mostrarRojo }" :disabled="letra.usada">
+            {{ letra.letra }}
+            <span v-if="letra.mostrarChulo">✓</span>
+            <span v-if="letra.mostrarX">✗</span>
+          </button>
+        </div>
+      </div>
+
+      <div v-if="juegoterminado" class="resultado flex flex-column items-center q-gutter-md">
+        <h2 v-if="resultado === 'ganaste'" class="text-green">¡Ganaste!</h2>
+        <h2 v-else class="text-red">¡Perdiste!</h2>
+
+        <div><strong>Categoría:</strong> {{ categoria }}</div>
+        <div><strong>Nivel:</strong> {{ nivel }}</div>
+        <div><strong>Tiempo:</strong> {{ tiempocontado }}</div>
+        <div><strong>Palabra:</strong> {{ palabrafinal }}</div>
+
+        <div class="botones q-gutter-md flex">
+          <button class="btn-jugar" @click="juegonuevo">Jugar de nuevo</button>
+          <button class="btn-categorias" @click="iracategorias">Ir a categorías</button>
         </div>
       </div>
 
@@ -43,40 +52,176 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { useRoute } from "vue-router";
+import { ref, computed } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { useStopwatch } from "vue-timer-hook";
 import CardInicio from "../components/CardInicio.vue";
-import { Palabras } from "../utils/vectoresinfo.js"; 
-import LocoJugar from "../assets/Loco.png";
+import { Palabras } from "../utils/vectoresinfo.js";
+
+const sesionActiva = ref(localStorage.getItem("usuarioActual") || "");
 
 const route = useRoute();
-
-// recibir categoría y nivel
+const router = useRouter();
 const categoria = route.query.cat;
 const nivel = route.query.niv;
 
-// refs
+const intentos = ref({ facil: 8, medio: 6, dificil: 5 }[nivel] || 5);
+const intentosiniciales = ref(intentos.value);
 const palabra = ref("");
-const intentos = ref(0);
 const slots = ref([]);
 
-// obtener palabra random
+const juegoterminado = ref(false);
+const resultado = ref(""); 
+const palabrafinal = ref(""); 
+
+import A00 from "../assets/A00.png";
+import A0 from "../assets/A0.png";
+import A1 from "../assets/A1.png";
+import A2 from "../assets/A2.png";
+import A3 from "../assets/A3.png";
+import A4 from "../assets/A4.png";
+import A5 from "../assets/A5.png";
+import A6 from "../assets/A6.png";
+
+const imgniveles = {
+  facil: [A00, A0, A1, A2, A3, A4, A5, A6],
+  medio: [A0, A1, A2, A3, A4, A5, A6],
+  dificil: [A0, A1, A2, A3, A4, A5, A6],
+};
+const imgahorcado = computed(() => {
+  const errores = intentosiniciales.value - intentos.value;
+  const imgs = imgniveles[nivel] || imgniveles.dificil;
+  const index = Math.min(errores, imgs.length - 1);
+  return imgs[index];
+});
+
 const lista = Palabras[categoria][nivel];
-palabra.value = lista[Math.floor(Math.random() * lista.length)];
+palabra.value = lista[Math.floor(Math.random() * lista.length)].toUpperCase();
+slots.value = palabra.value.split("").map(() => "");
 
-// asignar intentos
-if (nivel === "facil") intentos.value = 8;
-if (nivel === "medio") intentos.value = 6;
-if (nivel === "dificil") intentos.value = 5;
+const crearletra = letra => ({
+  letra,
+  usada: false,
+  mostrarVerde: false,
+  mostrarRojo: false,
+  mostrarChulo: false,
+  mostrarX: false
+});
+const teclado = [
+  "QWERTYUIOP".split("").map(crearletra),
+  "ASDFGHJKL".split("").map(crearletra),
+  "ZXCVBNM".split("").map(crearletra)
+];
 
-// crear casillas vacías según letras
-slots.value = Array.from({ length: palabra.value.length }, () => "");
+function seleccionarletra(letra) {
+  if (letra.usada || juegoterminado.value) return;
+  letra.usada = true;
 
-console.log("Categoría:", categoria);
-console.log("Nivel:", nivel);
-console.log("Palabra:", palabra.value);
-console.log("Intentos:", intentos.value);
-console.log("Slots:", slots.value);
+  const acierto = palabra.value.includes(letra.letra);
+  if (acierto) {
+    palabra.value.split("").forEach((char, i) => {
+      if (char === letra.letra) slots.value[i] = letra.letra;
+    });
+  } else {
+    intentos.value--;
+  }
+
+  letra.estado = acierto ? "correcta" : "incorrecta";
+  aplicarnivel(letra);
+  verificarestado();
+}
+
+function aplicarnivel(letra) {
+  const correcto = letra.estado === "correcta";
+  if (nivel === "facil") {
+    letra.mostrarVerde = correcto;
+    letra.mostrarChulo = correcto;
+    letra.mostrarRojo = !correcto;
+    letra.mostrarX = !correcto;
+  }
+  if (nivel === "medio" && correcto) {
+    letra.mostrarVerde = true;
+    letra.mostrarChulo = true;
+  }
+}
+
+// Cronómetro
+const stopwatch = useStopwatch(false);
+setTimeout(() => stopwatch.start(), 2000);
+const tiempocontado = computed(() =>
+  `${String(stopwatch.minutes.value).padStart(2, "0")}:${String(stopwatch.seconds.value).padStart(2, "0")}`
+);
+
+function pausartiempo() {
+  stopwatch.pause();
+}
+
+function verificarestado() {
+  if (slots.value.join("") === palabra.value) {
+    pausartiempo();
+    resultado.value = "ganaste";
+    juegoterminado.value = true;
+    palabrafinal.value = palabra.value;
+    guardarpartida(); // Guardar partida ganada
+  }
+  if (intentos.value <= 0) {
+    pausartiempo();
+    resultado.value = "perdiste";
+    juegoterminado.value = true;
+    palabrafinal.value = palabra.value;
+  }
+}
+
+function guardarpartida() {
+  if (!sesionActiva.value) return;
+
+  const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+  const usuario = usuarios.find(usuario => usuario.nick === sesionActiva.value);
+  if (!usuario) return;
+
+  const newpartida = {
+    categoria,
+    nivel,
+    tiempo: tiempocontado.value,
+    fecha: new Date().toLocaleString()
+  };
+
+  usuario.partidas.push(newpartida);
+  localStorage.setItem("usuarios", JSON.stringify(usuarios));
+}
+
+function nuevapalabra() {
+  const lista = Palabras[categoria][nivel];
+  palabra.value = lista[Math.floor(Math.random() * lista.length)].toUpperCase();
+  slots.value = palabra.value.split("").map(() => "");
+  intentos.value = { facil: 8, medio: 6, dificil: 5 }[nivel] || 5;
+  intentosiniciales.value = intentos.value;
+
+  teclado.forEach(fila => {
+    fila.forEach(letra => {
+      letra.usada = false;
+      letra.mostrarVerde = false;
+      letra.mostrarRojo = false;
+      letra.mostrarChulo = false;
+      letra.mostrarX = false;
+    });
+  });
+
+  stopwatch.reset();
+  stopwatch.start();
+
+  juegoterminado.value = false;
+  resultado.value = "";
+  palabrafinal.value = "";
+}
+
+function juegonuevo() {
+  nuevapalabra();
+}
+
+function iracategorias() {
+  router.push("/categorias");
+}
 </script>
 
 <style>
@@ -90,7 +235,7 @@ console.log("Slots:", slots.value);
 .slot {
   width: 40px;
   height: 40px;
-  background: #ffffff;
+  background: #fff;
   border: 2px solid #333;
   border-radius: 6px;
   font-size: 24px;
@@ -119,7 +264,60 @@ console.log("Slots:", slots.value);
   background: #ddd;
 }
 
-.ordenar {
+.verde {
+  background-color: #8dff8d !important;
+  color: #0a550a !important;
+}
+
+.rojo {
+  background-color: #ff8d8d !important;
+  color: #550a0a !important;
+}
+
+.imagenes {
+  width: 350px;
+  height: auto;
+}
+
+.imagenes img {
+  width: 100%;
+  height: 100%;
+}
+
+.teclado {
   margin: 0 !important;
+}
+
+.resultado {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.text-green {
+  color: #0a550a;
+}
+
+.text-red {
+  color: #550a0a;
+}
+
+.botones button {
+  margin: 0 10px;
+  padding: 10px 20px;
+  font-size: 18px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-jugar {
+  background-color: #8dff8d;
+  color: #0a550a;
+  border: none;
+}
+
+.btn-categorias {
+  background-color: #ff8d8d;
+  color: #550a0a;
+  border: none;
 }
 </style>

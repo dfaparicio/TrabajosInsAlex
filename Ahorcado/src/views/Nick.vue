@@ -1,6 +1,7 @@
 <template>
   <CardInicio titulo="¡Desafía al Ahorcado Maldito!"
     class="flex column justify-center items-center text-center q-gutter-md">
+
     <div class="row justify-center items-center q-gutter-md q-pb-xl">
       <div><img :src="Saludando" /></div>
       <div class="column justify-center">
@@ -15,8 +16,13 @@
         </p>
 
         <div class="row justify-center items-center q-gutter-xl">
-          <q-input v-model="nick" label="Ingresa tu nick" filled class="input-redondo input-label input-centro"
-            style="width: 50%" />
+          <q-input v-if="!sesionActiva" v-model="nick" label="Ingresa tu nick" filled class="nick-input"
+            style="width: 50%;" />
+
+          <div v-else class="activa row justify-center items-center q-gutter-md">
+            <strong>Jugando como:</strong>
+            <h4>{{ sesionActiva }}</h4>
+          </div>
 
           <q-btn round dense icon="check" @click="registrarOIniciar" />
         </div>
@@ -30,22 +36,20 @@
 </template>
 
 <script setup>
+
 import { ref } from "vue";
 import { Notify } from "quasar";
-
 import BotonIniciar from "../components/BotonIniciar.vue";
 import CardInicio from "../components/CardInicio.vue";
 import Saludando from "../assets/Saludando.png";
 
 const nick = ref("");
+const sesionActiva = ref(localStorage.getItem("usuarioActual") || "");
 
 function registrarOIniciar() {
-  const valor = nick.value.trim();
-
-  const sesionActiva = localStorage.getItem("usuarioActual");
-  if (sesionActiva) {
+  if (sesionActiva.value) {
     Notify.create({
-      message: `Ya estás conectado como: ${sesionActiva}`,
+      message: `Ya estás conectado como: ${sesionActiva.value}`,
       caption: "Para cambiar de desafiante, primero cierra sesión...",
       color: null,
       textColor: null,
@@ -58,41 +62,13 @@ function registrarOIniciar() {
     return;
   }
 
-  if (!valor) {
-    Notify.create({
-      message: "¡¡¡ESCRIBE TU NICK AHORA!!! 😱",
-      caption: "Las sombras no tienen paciencia...",
-      color: null,
-      textColor: null,
-      classes: "bg-white text-red-5 text-bold shadow-10 grito-notify",
-      icon: "priority_high",
-      position: "top",
-      timeout: 2500,
-      html: true
-    });
-    return;
-  }
-
-  if (valor.length < 3) {
-    Notify.create({
-      message: "¡TU NICK ES DEMASIADO CORTO! 😤",
-      caption: "El espíritu exige algo más digno...",
-      color: null,
-      textColor: null,
-      classes: "bg-white text-red-5 text-bold shadow-10 grito-notify",
-      icon: "report",
-      position: "top",
-      timeout: 2500,
-      html: true
-    });
-    return;
-  }
-
+  const valor = nick.value.trim();
   const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
   const existente = usuarios.find(u => u.nick === valor);
 
   if (existente) {
     localStorage.setItem("usuarioActual", existente.nick);
+    sesionActiva.value = existente.nick;
 
     Notify.create({
       message: `Volviste, ${existente.nick}...`,
@@ -105,7 +81,6 @@ function registrarOIniciar() {
       timeout: 2500,
       html: true
     });
-
     return;
   }
 
@@ -113,10 +88,10 @@ function registrarOIniciar() {
     nick: valor,
     partidas: []
   };
-
   usuarios.push(nuevoUsuario);
   localStorage.setItem("usuarios", JSON.stringify(usuarios));
   localStorage.setItem("usuarioActual", valor);
+  sesionActiva.value = valor;
 
   Notify.create({
     message: `Nuevo desafiante creado: ${valor}`,
@@ -132,70 +107,47 @@ function registrarOIniciar() {
 }
 </script>
 
-
-
-
 <style>
-.input-redondo .q-field__control {
-  border-radius: 20px !important;
+.nick-input .q-field__control {
+  background-color: rgba(0, 0, 0, 0.15) !important;
+  border-radius: 25px !important;
+  padding: 10px 15px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: box-shadow 0.3s ease-in-out;
 }
 
-.input-label .q-field__label {
-  font-size: 1.3rem !important;
+.nick-input .q-field__label {
+  color: #000000 !important;
   font-weight: bold !important;
-  padding: 2px 8px !important;
-  background: #000000 !important;
-  border-radius: 6px !important;
-  color: #c2bdbd !important;
-  border-radius: 20px !important;
-}
-
-.input-centro .q-field__native {
-  text-align: center !important;
   font-size: 1.5rem !important;
+  letter-spacing: 2px;
 }
 
-
-.grito-notify {
-  animation: temblorLoco 0.1s infinite, glitchColorLoco 0.15s infinite alternate, zoomLoco 0.4s infinite alternate !important;
-  letter-spacing: 5px !important;
-  font-size: 25px !important;          
-  background: rgba(0, 0, 0, 0.7) !important; 
-  padding: 12px 24px !important;
-  border-radius: 12px !important;
-  text-transform: uppercase !important;
+.nick-input .q-field__native {
+  color: #000000 !important;
+  font-size: 1.3rem !important;
   text-align: center !important;
-  display: inline-block !important;
-  max-width: 90% !important;
+  font-weight: normal !important;
+  background-color: transparent !important;
+  padding-bottom: 5px !important;
+  letter-spacing: 2px !important;
+  text-transform: none !important;
 }
 
-@keyframes temblorLoco {
-  0%   { transform: translate(0,0) rotate(0deg); }
-  10%  { transform: translate(-3px,2px) rotate(-2deg); }
-  20%  { transform: translate(4px,-3px) rotate(1deg); }
-  30%  { transform: translate(-2px,4px) rotate(-1deg); }
-  40%  { transform: translate(3px,-2px) rotate(2deg); }
-  50%  { transform: translate(-4px,1px) rotate(-1deg); }
-  60%  { transform: translate(2px,-3px) rotate(1deg); }
-  70%  { transform: translate(-1px,3px) rotate(-2deg); }
-  80%  { transform: translate(3px,-1px) rotate(2deg); }
-  90%  { transform: translate(-2px,2px) rotate(-1deg); }
-  100% { transform: translate(0,0) rotate(0deg); }
+.nick-input .q-field__bottom {
+  display: none;
 }
 
-@keyframes glitchColorLoco {
-  0%   { text-shadow: 2px 0 red, -2px 0 blue, 0 2px lime; }
-  20%  { text-shadow: -2px 1px blue, 2px -1px lime, 1px 0 red; }
-  40%  { text-shadow: 3px -2px lime, -3px 2px red, 0 0 blue; }
-  60%  { text-shadow: -1px 3px red, 1px -2px blue, 2px 0 lime; }
-  80%  { text-shadow: 2px -1px lime, -2px 1px blue, 0 3px red; }
-  100% { text-shadow: 3px 0 red, -3px 0 blue, 1px -1px lime; }
+.nick-input input::placeholder {
+  color: #888 !important;
+  text-align: center !important;
 }
 
-@keyframes zoomLoco {
-  0%   { transform: scale(1); }
-  50%  { transform: scale(1.05); }
-  100% { transform: scale(1); }
+.activa h4 {
+  color: #f00;
 }
 
+.activa {
+  letter-spacing: 3px;
+}
 </style>

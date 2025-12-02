@@ -40,7 +40,7 @@ router.beforeEach((to, from, next) => {
   }
 
   // Rutas que requieren sesión iniciada
-  const requiereSesion = ["/jugar", "/categorias", "/niveles", "/jugando", "/estadisticas"]
+  const requiereSesion = ["/jugar", "/categorias", "/estadisticas"]
 
   const usuario = localStorage.getItem("usuarioActual")
 

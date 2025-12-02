@@ -1,6 +1,6 @@
 <template>
   <q-card :style="{ backgroundColor: color }" class="card-pequena flex flex-column items-center justify-start"
-    @click="$emit('select', titulo.toLowerCase())">
+    @click="$emit('select', titulo.toLowerCase())" :class="{ seleccionada: selected }">
     <div class="img-container">
       <q-img :src="imagen" class="img-bw" />
     </div>
@@ -16,7 +16,8 @@ defineProps({
   color: { type: String, default: "#ffffff" },
   imagen: { type: String, required: true },
   titulo: { type: String, required: true },
-  parrafo: { type: String, required: true }
+  parrafo: { type: String, required: true },
+  selected: { type: Boolean, default: false }
 });
 
 defineEmits(["select"]);
@@ -57,5 +58,16 @@ defineEmits(["select"]);
 .card-pequena:hover .img-bw {
   filter: grayscale(0%);
   filter: brightness(120%);
+}
+
+.seleccionada {
+  background-color: #ffe066;
+  border: 3px solid #f0c419;
+  transform: translateY(-4px);
+  box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.seleccionada .img-bw {
+  filter: grayscale(0%) brightness(120%) !important;
 }
 </style>

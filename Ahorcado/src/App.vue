@@ -34,16 +34,6 @@
               <q-item-section>Categorías</q-item-section>
             </q-item>
 
-            <q-item clickable v-ripple to="/niveles">
-              <q-item-section avatar><q-icon name="layers" /></q-item-section>
-              <q-item-section>Niveles</q-item-section>
-            </q-item>
-
-            <q-item clickable v-ripple to="/jugando">
-              <q-item-section avatar><q-icon name="play_circle" /></q-item-section>
-              <q-item-section>Jugando</q-item-section>
-            </q-item>
-
             <q-item clickable v-ripple to="/estadisticas">
               <q-item-section avatar><q-icon name="bar_chart" /></q-item-section>
               <q-item-section>Estadísticas</q-item-section>
@@ -203,8 +193,8 @@ body {
 .grito-notify {
   animation: temblorLoco 0.1s infinite, glitchColorLoco 0.15s infinite alternate, zoomLoco 0.4s infinite alternate !important;
   letter-spacing: 5px !important;
-  font-size: 25px !important;          
-  background: rgba(0, 0, 0, 0.7) !important; 
+  font-size: 25px !important;
+  background: rgba(0, 0, 0, 0.7) !important;
   padding: 12px 24px !important;
   border-radius: 12px !important;
   text-transform: uppercase !important;
@@ -214,32 +204,88 @@ body {
 }
 
 @keyframes temblorLoco {
-  0%   { transform: translate(0,0) rotate(0deg); }
-  10%  { transform: translate(-3px,2px) rotate(-2deg); }
-  20%  { transform: translate(4px,-3px) rotate(1deg); }
-  30%  { transform: translate(-2px,4px) rotate(-1deg); }
-  40%  { transform: translate(3px,-2px) rotate(2deg); }
-  50%  { transform: translate(-4px,1px) rotate(-1deg); }
-  60%  { transform: translate(2px,-3px) rotate(1deg); }
-  70%  { transform: translate(-1px,3px) rotate(-2deg); }
-  80%  { transform: translate(3px,-1px) rotate(2deg); }
-  90%  { transform: translate(-2px,2px) rotate(-1deg); }
-  100% { transform: translate(0,0) rotate(0deg); }
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+
+  10% {
+    transform: translate(-3px, 2px) rotate(-2deg);
+  }
+
+  20% {
+    transform: translate(4px, -3px) rotate(1deg);
+  }
+
+  30% {
+    transform: translate(-2px, 4px) rotate(-1deg);
+  }
+
+  40% {
+    transform: translate(3px, -2px) rotate(2deg);
+  }
+
+  50% {
+    transform: translate(-4px, 1px) rotate(-1deg);
+  }
+
+  60% {
+    transform: translate(2px, -3px) rotate(1deg);
+  }
+
+  70% {
+    transform: translate(-1px, 3px) rotate(-2deg);
+  }
+
+  80% {
+    transform: translate(3px, -1px) rotate(2deg);
+  }
+
+  90% {
+    transform: translate(-2px, 2px) rotate(-1deg);
+  }
+
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
 }
 
 @keyframes glitchColorLoco {
-  0%   { text-shadow: 2px 0 red, -2px 0 blue, 0 2px lime; }
-  20%  { text-shadow: -2px 1px blue, 2px -1px lime, 1px 0 red; }
-  40%  { text-shadow: 3px -2px lime, -3px 2px red, 0 0 blue; }
-  60%  { text-shadow: -1px 3px red, 1px -2px blue, 2px 0 lime; }
-  80%  { text-shadow: 2px -1px lime, -2px 1px blue, 0 3px red; }
-  100% { text-shadow: 3px 0 red, -3px 0 blue, 1px -1px lime; }
+  0% {
+    text-shadow: 2px 0 red, -2px 0 blue, 0 2px lime;
+  }
+
+  20% {
+    text-shadow: -2px 1px blue, 2px -1px lime, 1px 0 red;
+  }
+
+  40% {
+    text-shadow: 3px -2px lime, -3px 2px red, 0 0 blue;
+  }
+
+  60% {
+    text-shadow: -1px 3px red, 1px -2px blue, 2px 0 lime;
+  }
+
+  80% {
+    text-shadow: 2px -1px lime, -2px 1px blue, 0 3px red;
+  }
+
+  100% {
+    text-shadow: 3px 0 red, -3px 0 blue, 1px -1px lime;
+  }
 }
 
 @keyframes zoomLoco {
-  0%   { transform: scale(1); }
-  50%  { transform: scale(1.05); }
-  100% { transform: scale(1); }
-}
+  0% {
+    transform: scale(1);
+  }
 
+  50% {
+    transform: scale(1.05);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
 </style>

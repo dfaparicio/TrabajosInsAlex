@@ -1,26 +1,22 @@
 <template>
   <button class="boton" @click="ir">
-    <slot></slot>  <!-- Aquí se muestra el contenido pasado desde el padre -->
+    <slot></slot>
   </button>
 </template>
 
 <script setup>
 import { useRouter } from 'vue-router'
-
 const router = useRouter()
-
 const { to } = defineProps({
   to: {
     type: String,
     required: true
   }
 })
-
 function ir() {
   router.push(to)
 }
 </script>
-
 
 <style scoped>
 .boton {

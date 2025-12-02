@@ -6,14 +6,14 @@
           <img :src="LocoJugar" alt="">
         </div>
         <div class="cards">
-          <CardMediana :imagen="Facil" titulo="facil" parrafo="Palabras de 4-6 letras + 8 intentos"
-            @select="seleccionarniv" />
+          <CardMediana :imagen="Facil" titulo="facil" parrafo="Palabras de 4-6 letras + 7 intentos"
+            @select="seleccionarniv" :selected="nivel === 'facil'" />
 
           <CardMediana :imagen="Medio" titulo="medio" parrafo="Palabras de 7-9 letras + 6 intentos"
-            @select="seleccionarniv" />
+            @select="seleccionarniv" :selected="nivel === 'medio'" />
 
           <CardMediana :imagen="Dificil" titulo="dificil" parrafo="Palabras de +10 letras + 5 intentos"
-            @select="seleccionarniv" />
+            @select="seleccionarniv" :selected="nivel === 'dificil'" />
         </div>
       </div>
 
