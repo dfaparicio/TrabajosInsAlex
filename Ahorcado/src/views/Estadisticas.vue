@@ -1,102 +1,199 @@
 <template>
-  <CardInicio titulo="Estadisticas">
-    <div class="top-container">
-      <div class="card">
-        <h3>1° Lugar</h3>
-        <p>Descripción del primer puesto</p>
-      </div>
-      <div class="card">
-        <h3>2° Lugar</h3>
-        <p>Descripción del segundo puesto</p>
-      </div>
-      <div class="card">
-        <h3>3° Lugar</h3>
-        <p>Descripción del tercer puesto</p>
-      </div>
+  <div class="contenedor">
+
+    <!-- TABS -->
+    <div class="tabs">
+      <button :class="{ active: tab === 'todos' }" @click="tab = 'todos'">Global</button>
+      <button :class="{ active: tab === 'facil' }" @click="tab = 'facil'">Fácil</button>
+      <button :class="{ active: tab === 'medio' }" @click="tab = 'medio'">Medio</button>
+      <button :class="{ active: tab === 'dificil' }" @click="tab = 'dificil'">Difícil</button>
     </div>
 
-    <table class="tabla-ranking">
-      <thead>
-        <tr>
-          <th>Puesto</th>
-          <th>Nombre</th>
-          <th>Puntos</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>4</td>
-          <td>Usuario 4</td>
-          <td>850</td>
-        </tr>
-        <tr>
-          <td>5</td>
-          <td>Usuario 5</td>
-          <td>820</td>
-        </tr>
-        <tr>
-          <td>6</td>
-          <td>Usuario 6</td>
-          <td>790</td>
-        </tr>
-      </tbody>
-    </table>
-  </CardInicio>
+    <div class="contenido">
+
+      <div v-if="tab === 'todos'">
+
+        <div class="top3">
+          <div class="lado segundo">
+            <CardTop2 :data="TopTodos[1]" />
+          </div>
+
+          <div class="centro primero">
+            <CardTop1 :data="TopTodos[0]" />
+          </div>
+
+          <div class="lado tercero">
+            <CardTop3 :data="TopTodos[2]" />
+          </div>
+        </div>
+
+        <Tabla :items="TopTodos.slice(3)" />
+      </div>
+
+      <div v-if="tab === 'facil'">
+
+        <div class="top3">
+          <div class="lado segundo">
+            <CardTop2 :data="TopFacil[1]" />
+          </div>
+
+          <div class="centro primero">
+            <CardTop1 :data="TopFacil[0]" />
+          </div>
+
+          <div class="lado tercero">
+            <CardTop3 :data="TopFacil[2]" />
+          </div>
+        </div>
+
+        <Tabla :items="TopFacil.slice(3)" />
+      </div>
+
+      <div v-if="tab === 'medio'">
+
+        <div class="top3">
+          <div class="lado segundo">
+            <CardTop2 :data="TopMedio[1]" />
+          </div>
+
+          <div class="centro primero">
+            <CardTop1 :data="TopMedio[0]" />
+          </div>
+
+          <div class="lado tercero">
+            <CardTop3 :data="TopMedio[2]" />
+          </div>
+        </div>
+
+        <Tabla :items="TopMedio.slice(3)" />
+      </div>
+
+      <div v-if="tab === 'dificil'">
+
+        <div class="top3">
+          <div class="lado segundo">
+            <CardTop2 :data="TopDificil[1]" />
+          </div>
+
+          <div class="centro primero">
+            <CardTop1 :data="TopDificil[0]" />
+          </div>
+
+          <div class="lado tercero">
+            <CardTop3 :data="TopDificil[2]" />
+          </div>
+        </div>
+
+        <Tabla :items="TopDificil.slice(3)" />
+      </div>
+
+    </div>
+  </div>
 </template>
 
+
+
 <script setup>
-import BotonIniciar from "../components/BotonIniciar.vue";
-import CardInicio from "../components/CardInicio.vue";
+import { ref, computed } from "vue";
+
+import CardTop1 from "@/components/CardTop1.vue";
+import CardTop2 from "@/components/CardTop2.vue";
+import CardTop3 from "@/components/CardTop3.vue";
+import Tabla from "@/components/Tabla.vue";
+
+const tab = ref("todos");
+
+function obtenerusuarios() {
+  return JSON.parse(localStorage.getItem("usuarios")) || [];
+}
+
+function tiempoasegundos(t) {
+  return t.split(":").reduce((m, s) => m * 60 + +s);
+}
+
+const TopTodos = computed(() => {
+  const usuarios = obtenerusuarios();
+
+  return usuarios.flatMap(u =>
+    u.partidas.map(p => ({
+      usuario: u.nick,
+      categoria: p.categoria,
+      nivel: p.nivel,
+      tiempo: p.tiempo,
+      fecha: p.fecha,
+      segundos: tiempoasegundos(p.tiempo)
+    }))
+  ).sort((a, b) => a.segundos - b.segundos);
+});
+
+const TopFacil = computed(() => TopTodos.value.filter(p => p.nivel === "facil"));
+const TopMedio = computed(() => TopTodos.value.filter(p => p.nivel === "medio"));
+const TopDificil = computed(() => TopTodos.value.filter(p => p.nivel === "dificil"));
+
 </script>
 
-<style>
-.top-container {
+
+<style scoped>
+.contenedor {
+  padding: 25px;
+  min-height: 100vh;
+
+  color: #e5e5e5;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 25px;
+  justify-content: center;
+}
+
+.tabs button {
+  padding: 12px 22px;
+  border: none;
+  background: #1c1c22;
+  color: #bbb;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 15px;
+  transition: 0.25s ease;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+}
+
+.tabs button:hover {
+  background: #252530;
+  color: #fff;
+}
+
+.tabs button.active {
+  background: #6a00ff;
+  color: #fff;
+  box-shadow: 0 0 15px #6a00ffb0;
+}
+
+/* Contenido General */
+.contenido {
+  margin-top: 15px;
+  padding: 15px;
+}
+
+.top3 {
   display: flex;
   justify-content: center;
-  gap: 20px;
-  margin-bottom: 30px;
-  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 200px;
+  padding: 50px;
 }
 
-.card {
-  width: 250px;
-  padding: 20px;
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  text-align: center;
+.centro {
+  transform: scale(1.25);
+  position: relative;
+  z-index: 2;
 }
 
-.card h3 {
-  margin: 0;
-  font-size: 22px;
-  color: #333;
-}
-
-.card p {
-  margin-top: 10px;
-  color: #666;
-}
-
-.tabla-ranking {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 18px;
-}
-
-.tabla-ranking th {
-  background: #333;
-  color: white;
-  padding: 12px;
-  text-align: left;
-}
-
-.tabla-ranking td {
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
-}
-
-.tabla-ranking tr:hover {
-  background: #f1f1f1;
+.lado {
+  transform: translateY(25px) scale(1.05);
 }
 </style>
