@@ -31,14 +31,14 @@ defineProps({
 }
 
 .titulo {
-  font-size: clamp(1.8rem, 6vw, 3rem);
+  font-size: clamp(1.8rem, 6vw, 2rem);
   color: #000000;
   -webkit-text-stroke: clamp(0.5px, 0.4vw, 1.5px) #000;
   text-align: center;
   transform: rotate(-2deg);
   transition: transform 0.1s;
   letter-spacing: clamp(0.5px, 0.4vw, 8px);
-  width: 90%;
+  padding: 20px;
 }
 
 .titulo:hover {

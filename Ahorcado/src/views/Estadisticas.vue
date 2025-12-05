@@ -1,18 +1,23 @@
 <template>
   <div class="contenedor">
-
     <!-- TABS -->
     <div class="tabs">
-      <button :class="{ active: tab === 'todos' }" @click="tab = 'todos'">Global</button>
-      <button :class="{ active: tab === 'facil' }" @click="tab = 'facil'">Fácil</button>
-      <button :class="{ active: tab === 'medio' }" @click="tab = 'medio'">Medio</button>
-      <button :class="{ active: tab === 'dificil' }" @click="tab = 'dificil'">Difícil</button>
+      <button :class="{ active: tab === 'todos' }" @click="tab = 'todos'">
+        Global
+      </button>
+      <button :class="{ active: tab === 'facil' }" @click="tab = 'facil'">
+        Fácil
+      </button>
+      <button :class="{ active: tab === 'medio' }" @click="tab = 'medio'">
+        Medio
+      </button>
+      <button :class="{ active: tab === 'dificil' }" @click="tab = 'dificil'">
+        Difícil
+      </button>
     </div>
 
     <div class="contenido">
-
       <div v-if="tab === 'todos'">
-
         <div class="top3">
           <div class="lado segundo">
             <CardTop2 :data="TopTodos[1]" />
@@ -31,7 +36,6 @@
       </div>
 
       <div v-if="tab === 'facil'">
-
         <div class="top3">
           <div class="lado segundo">
             <CardTop2 :data="TopFacil[1]" />
@@ -50,7 +54,6 @@
       </div>
 
       <div v-if="tab === 'medio'">
-
         <div class="top3">
           <div class="lado segundo">
             <CardTop2 :data="TopMedio[1]" />
@@ -69,7 +72,6 @@
       </div>
 
       <div v-if="tab === 'dificil'">
-
         <div class="top3">
           <div class="lado segundo">
             <CardTop2 :data="TopDificil[1]" />
@@ -86,7 +88,6 @@
 
         <Tabla :items="TopDificil.slice(3)" />
       </div>
-
     </div>
   </div>
 </template>
@@ -114,52 +115,58 @@ function tiempoasegundos(t) {
 const TopTodos = computed(() => {
   const usuarios = obtenerusuarios();
 
-  return usuarios.flatMap(u =>
-    u.partidas.map(p => ({
-      usuario: u.nick,
-      categoria: p.categoria,
-      nivel: p.nivel,
-      tiempo: p.tiempo,
-      fecha: p.fecha,
-      segundos: tiempoasegundos(p.tiempo)
-    }))
-  ).sort((a, b) => a.segundos - b.segundos);
+  return usuarios
+    .flatMap((u) =>
+      u.partidas.map((p) => ({
+        usuario: u.nick,
+        categoria: p.categoria,
+        nivel: p.nivel,
+        tiempo: p.tiempo,
+        fecha: p.fecha,
+        segundos: tiempoasegundos(p.tiempo),
+      }))
+    )
+    .sort((a, b) => a.segundos - b.segundos);
 });
 
-const TopFacil = computed(() => TopTodos.value.filter(p => p.nivel === "facil"));
-const TopMedio = computed(() => TopTodos.value.filter(p => p.nivel === "medio"));
-const TopDificil = computed(() => TopTodos.value.filter(p => p.nivel === "dificil"));
-
+const TopFacil = computed(() =>
+  TopTodos.value.filter((p) => p.nivel === "facil")
+);
+const TopMedio = computed(() =>
+  TopTodos.value.filter((p) => p.nivel === "medio")
+);
+const TopDificil = computed(() =>
+  TopTodos.value.filter((p) => p.nivel === "dificil")
+);
 </script>
 
 
 <style scoped>
 .contenedor {
-  padding: 25px;
+  padding: clamp(15px, 4vw, 25px);
   min-height: 100vh;
-
   color: #e5e5e5;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: "Segoe UI", sans-serif;
 }
 
 .tabs {
   display: flex;
-  gap: 12px;
-  margin-bottom: 25px;
+  gap: clamp(8px, 2vw, 12px);
+  margin-bottom: clamp(15px, 4vw, 25px);
   justify-content: center;
 }
 
 .tabs button {
-  padding: 12px 22px;
+  padding: clamp(8px, 2vw, 12px) clamp(15px, 4vw, 22px);
   border: none;
   background: #1c1c22;
   color: #bbb;
-  border-radius: 10px;
+  border-radius: clamp(6px, 2vw, 10px);
   cursor: pointer;
   font-weight: bold;
-  font-size: 15px;
+  font-size: clamp(12px, 3vw, 15px);
   transition: 0.25s ease;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 clamp(6px, 2vw, 8px) rgba(0, 0, 0, 0.4);
 }
 
 .tabs button:hover {
@@ -170,30 +177,30 @@ const TopDificil = computed(() => TopTodos.value.filter(p => p.nivel === "difici
 .tabs button.active {
   background: #6a00ff;
   color: #fff;
-  box-shadow: 0 0 15px #6a00ffb0;
+  box-shadow: 0 0 clamp(10px, 4vw, 15px) #6a00ffb0;
 }
 
-/* Contenido General */
 .contenido {
-  margin-top: 15px;
-  padding: 15px;
+  margin-top: clamp(10px, 3vw, 15px);
+  padding: clamp(10px, 3vw, 15px);
 }
 
 .top3 {
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  gap: 200px;
-  padding: 50px;
+  gap: clamp(30px, 10vw, 120px);
+  padding: clamp(15px, 5vw, 50px);
+  flex-wrap: wrap;
 }
 
 .centro {
-  transform: scale(1.25);
+  transform: scale(clamp(1, 1.2, 1.25));
   position: relative;
   z-index: 2;
 }
 
 .lado {
-  transform: translateY(25px) scale(1.05);
+  transform: translateY(clamp(5px, 2vw, 25px)) scale(clamp(0.9, 1, 1.05));
 }
 </style>

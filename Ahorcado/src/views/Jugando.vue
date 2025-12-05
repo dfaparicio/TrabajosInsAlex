@@ -395,4 +395,8 @@ function iracategorias() {
   transform: translateY(-2px) !important;
   box-shadow: 0 0 8px rgba(138, 43, 226, 0.6), 0 0 12px rgba(0, 191, 255, 0.4) !important;
 }
+
+.ordenar{
+  margin: 0 !important;
+}
 </style>

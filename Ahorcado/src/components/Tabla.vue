@@ -13,7 +13,7 @@
       </thead>
 
       <tbody>
-        <tr v-for="(item, index) in items" :key="index">
+        <tr v-for="(item, index) in items" :key="index" class="text-center">
           <td>{{ index + 4 }}</td>
           <td>{{ item.usuario }}</td>
           <td>{{ item.categoria }}</td>

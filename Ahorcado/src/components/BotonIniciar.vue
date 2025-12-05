@@ -22,15 +22,13 @@ function ir() {
 .boton {
   background: #979090;
   color: #ffffff;
-  font-weight: 900;
   font-size: clamp(1rem, 3vw, 2rem);
-  padding: clamp(0.6rem, 2vw, 1rem) clamp(1.5rem, 4vw, 2.5rem);
-  border: clamp(2px, 0.6vw, 4px) solid #000;
+  padding: clamp(0.6rem, 2vw, 0.5rem) clamp(1.5rem, 4vw, 1rem);
   border-radius: clamp(15px, 4vw, 30px);
   cursor: pointer;
   box-shadow: clamp(3px, 1vw, 6px) clamp(3px, 1vw, 6px) 0px #000;
   transition: 0.15s ease;
-  letter-spacing: clamp(0.5px, 0.4vw, 3px);
+  letter-spacing: clamp(0.5px, 0.4vw, 2px);
 }
 
 .boton:hover {
