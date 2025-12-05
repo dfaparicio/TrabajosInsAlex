@@ -2,14 +2,15 @@
   <div class="card-top primero" v-if="data">
     <div class="num">1°</div>
     <div class="nombre">{{ data.usuario }}</div>
-    <div class="tiempo">{{ data.tiempo }}</div>
+    <div class="tiempo">{{ data.categoria }}</div>
+    <div class="tiempo row q-gutter-md justify-center"><div>{{ data.nivel }}</div> <br> <div>{{ data.tiempo }}</div></div>
   </div>
 </template>
 
 <script setup>
 defineProps({
-  data: Object
-})
+  data: Object,
+});
 </script>
 
 <style scoped>
@@ -18,16 +19,17 @@ defineProps({
   padding: 22px;
   text-align: center;
   border-radius: 20px;
-  margin: 12px auto;
 
-  background: linear-gradient(135deg, rgba(20,20,30,0.75), rgba(10,10,15,0.65));
+  background: linear-gradient(
+    135deg,
+    rgba(20, 20, 30, 0.75),
+    rgba(10, 10, 15, 0.65)
+  );
   backdrop-filter: blur(12px);
 
-  box-shadow:
-    inset 0 0 12px rgba(0,0,0,0.7),
-    0 0 18px rgba(0,0,0,0.4);
+  box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.7), 0 0 18px rgba(0, 0, 0, 0.4);
 
-  border: 2px solid rgba(255,255,255,0.08);
+  border: 2px solid rgba(255, 255, 255, 0.08);
   color: #eee;
   transition: 0.25s ease;
 }
@@ -46,7 +48,6 @@ defineProps({
 
 .nombre {
   font-size: 22px;
-  margin-top: 10px;
   color: #dfccff;
   font-weight: 600;
 }
@@ -54,7 +55,6 @@ defineProps({
 .tiempo {
   font-size: 17px;
   opacity: 0.85;
-  margin-top: 12px;
 }
 
 /* ESTILO DE TOP 1 */

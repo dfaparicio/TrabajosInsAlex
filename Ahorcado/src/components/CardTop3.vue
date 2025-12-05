@@ -1,8 +1,9 @@
 <template>
-  <div class="card-top tercero" v-if="data">
+  <div class="card-top primero" v-if="data">
     <div class="num">3°</div>
     <div class="nombre">{{ data.usuario }}</div>
-    <div class="tiempo">{{ data.tiempo }}</div>
+    <div class="tiempo">{{ data.categoria }}</div>
+    <div class="tiempo row q-gutter-md justify-center"><div>{{ data.nivel }}</div> <br> <div>{{ data.tiempo }}</div></div>
   </div>
 </template>
 
@@ -18,7 +19,6 @@ defineProps({
   padding: 22px;
   text-align: center;
   border-radius: 20px;
-  margin: 12px auto;
 
   background: linear-gradient(135deg, rgba(20,20,30,0.75), rgba(10,10,15,0.65));
   backdrop-filter: blur(12px);
@@ -46,7 +46,6 @@ defineProps({
 
 .nombre {
   font-size: 22px;
-  margin-top: 10px;
   color: #dfccff;
   font-weight: 600;
 }
@@ -54,7 +53,6 @@ defineProps({
 .tiempo {
   font-size: 17px;
   opacity: 0.85;
-  margin-top: 12px;
 }
 
 .tercero {

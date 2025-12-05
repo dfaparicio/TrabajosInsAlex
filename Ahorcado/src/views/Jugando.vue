@@ -86,7 +86,7 @@ import A6 from "../assets/A6.png";
 const imgniveles = {
   facil: [A00, A0, A1, A2, A3, A4, A5, A6],
   medio: [A0, A1, A2, A3, A4, A5, A6],
-  dificil: [A0, A1, A2, A3, A4, A5, A6],
+  dificil: [A0, A1, A2, A4, A5, A6],
 };
 const imgahorcado = computed(() => {
   const errores = intentosiniciales.value - intentos.value;
