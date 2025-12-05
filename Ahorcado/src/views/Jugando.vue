@@ -2,18 +2,10 @@
   <CardInicio class="flex justify-center items-center">
     <div class="flex column q-gutter-xl">
       <div class="ordenar flex justify-center q-gutter-xl">
-        <div>
-          <strong>{{ categoria }}</strong>
-        </div>
-        <div>
-          <strong>{{ nivel }}</strong>
-        </div>
-        <div>
-          <strong>Intentos: {{ intentos }}</strong>
-        </div>
-        <div>
-          <strong>Tiempo: {{ tiempocontado }}</strong>
-        </div>
+        <div class="dato-info">Categoría: {{ categoria }}</div>
+        <div class="dato-info">Nivel: {{ nivel }}</div>
+        <div class="dato-info">Intentos: {{ intentos }}</div>
+        <div class="dato-info">Tiempo: {{ tiempocontado }}</div>
       </div>
 
       <div class="ordenar row justify-center items-center q-gutter-xl">
@@ -261,35 +253,35 @@ function iracategorias() {
 
 <style>
 .bases {
-  display: flex;
-  justify-content: center;
-  gap: clamp(10px, 4vw, 20px);
+  display: flex !important;
+  justify-content: center !important;
+  gap: clamp(10px, 4vw, 20px) !important;
 }
 
 .slot {
-  width: clamp(30px, 6vw, 40px);
-  height: clamp(30px, 6vw, 40px);
-  background: #fff;
-  border: 2px solid #333;
-  border-radius: 6px;
-  font-size: clamp(18px, 4vw, 24px);
-  text-align: center;
-  line-height: clamp(30px, 6vw, 40px);
+  width: clamp(30px, 6vw, 40px) !important;
+  height: clamp(30px, 6vw, 40px) !important;
+  background: #fff !important;
+  border: 2px solid #333 !important;
+  border-radius: 6px !important;
+  font-size: clamp(18px, 4vw, 24px) !important;
+  text-align: center !important;
+  line-height: clamp(30px, 6vw, 40px) !important;
 }
 
 .fila {
-  text-align: center;
+  text-align: center !important;
 }
 
 .fila button {
-  margin: clamp(2px, 0.8vw, 4px);
-  padding: clamp(10px, 3vw, 15px) clamp(18px, 6vw, 30px);
-  font-size: clamp(18px, 6vw, 30px);
-  border: none;
-  background: #fff;
-  border-radius: 5px;
-  cursor: pointer;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
+  margin: clamp(2px, 0.8vw, 4px) !important;
+  padding: clamp(10px, 3vw, 15px) clamp(18px, 6vw, 30px) !important;
+  font-size: clamp(18px, 6vw, 30px) !important;
+  border: none !important;
+  background: #fff !important;
+  border-radius: 5px !important;
+  cursor: pointer !important;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2) !important;
 }
 
 .verde {
@@ -303,22 +295,23 @@ function iracategorias() {
 }
 
 .imagenes {
-  width: clamp(220px, 60vw, 350px);
+  width: clamp(220px, 60vw, 350px) !important;
 }
 
 .imagenes img {
-  width: 100%;
+  width: 100% !important;
 }
 
 .resultado {
-  text-align: center;
+  text-align: center !important;
 }
 
 .text-green {
-  color: #0a550a;
+  color: #0a550a !important;
 }
+
 .text-red {
-  color: #550a0a;
+  color: #550a0a !important;
 }
 
 .btn-jugar {
@@ -336,8 +329,8 @@ function iracategorias() {
   text-align: center !important;
   color: #f5f5f5 !important;
   margin: 0 !important;
-  padding: 40px 100px 40px 100px !important;
-  gap: 30px !important;
+  padding: clamp(30px, 8vw, 40px) clamp(20px, 10vw, 100px) !important;
+  gap: clamp(20px, 4vw, 30px) !important;
 }
 
 .titulo-resultado {
@@ -349,6 +342,7 @@ function iracategorias() {
 .ganador {
   text-shadow: 0 0 12px rgba(0, 255, 51, 0.9) !important;
 }
+
 .perdedor {
   text-shadow: 0 0 14px rgba(255, 40, 40, 0.9) !important;
 }
@@ -373,5 +367,32 @@ function iracategorias() {
 
 .modal-ahorcado * {
   color: #f5f5f5 !important;
+}
+
+.info-juego {
+  background: #1a1c22 !important;
+  padding: clamp(12px, 3vw, 24px) !important;
+  border-radius: 12px !important;
+  border: 1px solid #4b4e5a !important;
+  box-shadow: 0 0 12px rgba(75, 78, 90, 0.4) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: clamp(10px, 3vw, 20px) !important;
+}
+
+.dato-info {
+  font-size: clamp(14px, 3vw, 18px) !important;
+  margin: clamp(4px, 1vw, 8px) !important;
+  padding: clamp(6px, 1.5vw, 12px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 8px !important;
+  text-align: center !important;
+  text-shadow: 0 0 4px rgba(138, 43, 226, 0.6) 0 0 8px rgba(0, 191, 255, 0.4) !important;
+  transition: transform 0.2s ease !important;
+}
+
+.dato-info:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 0 8px rgba(138, 43, 226, 0.6), 0 0 12px rgba(0, 191, 255, 0.4) !important;
 }
 </style>
