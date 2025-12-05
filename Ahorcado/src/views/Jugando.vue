@@ -1,12 +1,19 @@
 <template>
   <CardInicio class="flex justify-center items-center">
     <div class="flex column q-gutter-xl">
-
       <div class="ordenar flex justify-center q-gutter-xl">
-        <div><strong>{{ categoria }}</strong></div>
-        <div><strong>{{ nivel }}</strong></div>
-        <div><strong>Intentos: {{ intentos }}</strong></div>
-        <div><strong>Tiempo: {{ tiempocontado }}</strong></div>
+        <div>
+          <strong>{{ categoria }}</strong>
+        </div>
+        <div>
+          <strong>{{ nivel }}</strong>
+        </div>
+        <div>
+          <strong>Intentos: {{ intentos }}</strong>
+        </div>
+        <div>
+          <strong>Tiempo: {{ tiempocontado }}</strong>
+        </div>
       </div>
 
       <div class="ordenar row justify-center items-center q-gutter-xl">
@@ -16,37 +23,61 @@
 
         <div class="flex column justify-center items-center">
           <div class="bases">
-            <div class="slot" v-for="(slot, index) in slots" :key="index">{{ slot }}</div>
+            <div class="slot" v-for="(slot, index) in slots" :key="index">
+              {{ slot }}
+            </div>
           </div>
         </div>
       </div>
 
       <div v-if="!juegoterminado" class="teclado">
         <div class="fila" v-for="(fila, index) in teclado" :key="index">
-          <button v-for="letra in fila" :key="letra.letra" @click="seleccionarletra(letra)"
-            :class="{ verde: letra.mostrarVerde, rojo: letra.mostrarRojo }" :disabled="letra.usada">
+          <button
+            v-for="letra in fila"
+            :key="letra.letra"
+            @click="seleccionarletra(letra)"
+            :class="{ verde: letra.mostrarVerde, rojo: letra.mostrarRojo }"
+            :disabled="letra.usada"
+          >
             {{ letra.letra }}
-            <span v-if="letra.mostrarChulo">✓</span>
-            <span v-if="letra.mostrarX">✗</span>
           </button>
         </div>
       </div>
 
-      <div v-if="juegoterminado" class="resultado flex flex-column items-center q-gutter-md">
-        <h2 v-if="resultado === 'ganaste'" class="text-green">¡Ganaste!</h2>
-        <h2 v-else class="text-red">¡Perdiste!</h2>
+      <q-dialog v-model="juegoterminado">
+        <q-card class="modal-ahorcado column items-center">
+          <div>
+            <h2 v-if="resultado === 'ganaste'" class="titulo-resultado ganador">
+              ¡Ganaste!
+            </h2>
+            <h2 v-else class="titulo-resultado perdedor">¡Perdiste!</h2>
+          </div>
 
-        <div><strong>Categoría:</strong> {{ categoria }}</div>
-        <div><strong>Nivel:</strong> {{ nivel }}</div>
-        <div><strong>Tiempo:</strong> {{ tiempocontado }}</div>
-        <div><strong>Palabra:</strong> {{ palabrafinal }}</div>
+          <div class="q-gutter-md">
+            <div class="dato"><span>Categoría:</span> {{ categoria }}</div>
+            <div class="dato"><span>Nivel:</span> {{ nivel }}</div>
+            <div class="dato"><span>Tiempo:</span> {{ tiempocontado }}</div>
+            <div class="dato"><span>Palabra:</span> {{ palabrafinal }}</div>
+          </div>
 
-        <div class="botones q-gutter-md flex">
-          <button class="btn-jugar" @click="juegonuevo">Jugar de nuevo</button>
-          <button class="btn-categorias" @click="iracategorias">Ir a categorías</button>
-        </div>
-      </div>
-
+          <div class="flex row q-gutter-md">
+            <div>
+              <q-btn
+                class="btn-jugar"
+                @click="juegonuevo"
+                label="Jugar de nuevo"
+              />
+            </div>
+            <div>
+              <q-btn
+                class="btn-categorias"
+                @click="iracategorias"
+                label="Ir a categorías"
+              />
+            </div>
+          </div>
+        </q-card>
+      </q-dialog>
     </div>
   </CardInicio>
 </template>
@@ -71,8 +102,8 @@ const palabra = ref("");
 const slots = ref([]);
 
 const juegoterminado = ref(false);
-const resultado = ref(""); 
-const palabrafinal = ref(""); 
+const resultado = ref("");
+const palabrafinal = ref("");
 
 import A00 from "../assets/A00.png";
 import A0 from "../assets/A0.png";
@@ -99,18 +130,17 @@ const lista = Palabras[categoria][nivel];
 palabra.value = lista[Math.floor(Math.random() * lista.length)].toUpperCase();
 slots.value = palabra.value.split("").map(() => "");
 
-const crearletra = letra => ({
+const crearletra = (letra) => ({
   letra,
   usada: false,
   mostrarVerde: false,
   mostrarRojo: false,
   mostrarChulo: false,
-  mostrarX: false
 });
 const teclado = [
   "QWERTYUIOP".split("").map(crearletra),
   "ASDFGHJKL".split("").map(crearletra),
-  "ZXCVBNM".split("").map(crearletra)
+  "ZXCVBNM".split("").map(crearletra),
 ];
 
 function seleccionarletra(letra) {
@@ -146,10 +176,13 @@ function aplicarnivel(letra) {
 }
 
 // Cronómetro
-const stopwatch = useStopwatch(false);
-setTimeout(() => stopwatch.start(), 2000);
-const tiempocontado = computed(() =>
-  `${String(stopwatch.minutes.value).padStart(2, "0")}:${String(stopwatch.seconds.value).padStart(2, "0")}`
+const stopwatch = useStopwatch(true); // inicia automáticamente
+
+const tiempocontado = computed(
+  () =>
+    `${String(stopwatch.minutes.value).padStart(2, "0")}:${String(
+      stopwatch.seconds.value
+    ).padStart(2, "0")}`
 );
 
 function pausartiempo() {
@@ -162,7 +195,7 @@ function verificarestado() {
     resultado.value = "ganaste";
     juegoterminado.value = true;
     palabrafinal.value = palabra.value;
-    guardarpartida(); // Guardar partida ganada
+    guardarpartida();
   }
   if (intentos.value <= 0) {
     pausartiempo();
@@ -176,14 +209,16 @@ function guardarpartida() {
   if (!sesionActiva.value) return;
 
   const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
-  const usuario = usuarios.find(usuario => usuario.nick === sesionActiva.value);
+  const usuario = usuarios.find(
+    (usuario) => usuario.nick === sesionActiva.value
+  );
   if (!usuario) return;
 
   const newpartida = {
     categoria,
     nivel,
     tiempo: tiempocontado.value,
-    fecha: new Date().toLocaleString()
+    fecha: new Date().toLocaleString(),
   };
 
   usuario.partidas.push(newpartida);
@@ -197,8 +232,8 @@ function nuevapalabra() {
   intentos.value = { facil: 8, medio: 6, dificil: 5 }[nivel] || 5;
   intentosiniciales.value = intentos.value;
 
-  teclado.forEach(fila => {
-    fila.forEach(letra => {
+  teclado.forEach((fila) => {
+    fila.forEach((letra) => {
       letra.usada = false;
       letra.mostrarVerde = false;
       letra.mostrarRojo = false;
@@ -228,40 +263,33 @@ function iracategorias() {
 .bases {
   display: flex;
   justify-content: center;
-  margin-bottom: 20px;
-  gap: 20px;
+  gap: clamp(10px, 4vw, 20px);
 }
 
 .slot {
-  width: 40px;
-  height: 40px;
+  width: clamp(30px, 6vw, 40px);
+  height: clamp(30px, 6vw, 40px);
   background: #fff;
   border: 2px solid #333;
   border-radius: 6px;
-  font-size: 24px;
+  font-size: clamp(18px, 4vw, 24px);
   text-align: center;
-  line-height: 40px;
-  font-weight: bold;
+  line-height: clamp(30px, 6vw, 40px);
 }
 
 .fila {
-  margin: 5px 0;
   text-align: center;
 }
 
 .fila button {
-  margin: 3px;
-  padding: 15px 30px;
-  font-size: 30px;
+  margin: clamp(2px, 0.8vw, 4px);
+  padding: clamp(10px, 3vw, 15px) clamp(18px, 6vw, 30px);
+  font-size: clamp(18px, 6vw, 30px);
   border: none;
   background: #fff;
   border-radius: 5px;
   cursor: pointer;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
-}
-
-.fila button:active {
-  background: #ddd;
 }
 
 .verde {
@@ -275,49 +303,75 @@ function iracategorias() {
 }
 
 .imagenes {
-  width: 350px;
-  height: auto;
+  width: clamp(220px, 60vw, 350px);
 }
 
 .imagenes img {
   width: 100%;
-  height: 100%;
-}
-
-.teclado {
-  margin: 0 !important;
 }
 
 .resultado {
-  margin-top: 20px;
   text-align: center;
 }
 
 .text-green {
   color: #0a550a;
 }
-
 .text-red {
   color: #550a0a;
 }
 
-.botones button {
-  margin: 0 10px;
-  padding: 10px 20px;
-  font-size: 18px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
 .btn-jugar {
-  background-color: #8dff8d;
-  color: #0a550a;
-  border: none;
+  background-color: #5f5f5f !important;
 }
 
 .btn-categorias {
-  background-color: #ff8d8d;
-  color: #550a0a;
-  border: none;
+  background-color: #5f5f5f !important;
+}
+
+.modal-ahorcado {
+  width: clamp(260px, 85vw, 500px) !important;
+  background: #1c1e24 !important;
+  border-radius: 14px !important;
+  text-align: center !important;
+  color: #f5f5f5 !important;
+  margin: 0 !important;
+  padding: 40px 100px 40px 100px !important;
+  gap: 30px !important;
+}
+
+.titulo-resultado {
+  font-size: clamp(30px, 8vw, 45px) !important;
+  letter-spacing: 1.5px !important;
+  margin-bottom: clamp(10px, 4vw, 20px) !important;
+}
+
+.ganador {
+  text-shadow: 0 0 12px rgba(0, 255, 51, 0.9) !important;
+}
+.perdedor {
+  text-shadow: 0 0 14px rgba(255, 40, 40, 0.9) !important;
+}
+
+.btn-game {
+  background: #2d2f36 !important;
+  border: 1px solid #44484f !important;
+  padding: clamp(10px, 3vw, 14px) clamp(16px, 5vw, 22px) !important;
+  border-radius: 8px !important;
+  font-size: clamp(12px, 4vw, 16px) !important;
+  text-transform: none !important;
+  width: 100% !important;
+}
+
+.btn-game:hover {
+  background: #3a3c44 !important;
+}
+
+.btn-game:active {
+  transform: scale(0.95) !important;
+}
+
+.modal-ahorcado * {
+  color: #f5f5f5 !important;
 }
 </style>
