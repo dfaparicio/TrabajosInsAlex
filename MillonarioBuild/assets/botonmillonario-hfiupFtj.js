@@ -1,1 +1,0 @@
-import{_ as t,o,c as l,h as a}from"./index-Cg-akETl.js";const n={__name:"botonmillonario",props:{label:{type:String,required:!0},to:{type:String,default:null}},setup(e){return(r,c)=>(o(),l(a,{label:e.label,class:"millionaire-btn",unelevated:"",to:e.to,"no-caps":""},null,8,["label","to"]))}},i=t(n,[["__scopeId","data-v-7fd65ebf"]]);export{i as b};

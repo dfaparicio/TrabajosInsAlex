@@ -8,8 +8,7 @@ import { router } from './routes/routes.js'
 // Import icon libraries
 import '@quasar/extras/material-icons/material-icons.css'
 
-// Import Quasar css
-import 'quasar/src/css/index.sass'
+import 'quasar/dist/quasar.css'
 
 // Import language (default export)
 import es from 'quasar/lang/es.js'
